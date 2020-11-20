@@ -6,7 +6,6 @@
 
     <groupId>ADS</groupId>
     <artifactId>Assignment3</artifactId>
-    <packaging>pom</packaging>
     <version>20.1</version>
 
     <properties>
