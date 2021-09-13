@@ -14,7 +14,8 @@ public class TrainsMain {
         amsterdamParis.attachToRear(new PassengerWagon(8002,32));
         amsterdamParis.attachToRear(new PassengerWagon(8003,18));
         amsterdamParis.attachToRear(new PassengerWagon(8004,44));
-        amsterdamParis.attachToRear(new PassengerWagon(8005,44));
+
+        amsterdamParis.attachToRear(new PassengerWagon(8005,44)); //4
         amsterdamParis.attachToRear(new PassengerWagon(8006,44));
         amsterdamParis.attachToRear(new PassengerWagon(8007,44));
         System.out.println(amsterdamParis);
@@ -24,7 +25,13 @@ public class TrainsMain {
 
         Locomotive vanGogh = new Locomotive(63427, 6);
         Train amsterdamLondon = new Train(vanGogh, "Amsterdam", "London");
-//        amsterdamParis.splitAtPosition(4, amsterdamLondon);
+
+        amsterdamParis.splitAtPosition(4, amsterdamLondon);
+
+        //my code
+        System.out.println(amsterdamParis);
+        System.out.println(amsterdamLondon);
+
 //        amsterdamLondon.reverse();
 //        amsterdamLondon.insertAtFront(new FreightWagon(9001, 50000));
 //        amsterdamParis.reverse();

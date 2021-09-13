@@ -23,11 +23,11 @@ public class Train {
     }
 
     public boolean isPassengerTrain() {
-        return firstWagon instanceof PassengerWagon;
+        return firstWagon instanceof PassengerWagon || firstWagon == null;
     }
 
     public boolean isFreightTrain() {
-        return firstWagon instanceof FreightWagon;
+        return firstWagon instanceof FreightWagon || firstWagon == null;
     }
 
     public Locomotive getEngine() {
@@ -104,9 +104,19 @@ public class Train {
      * (return 0 for a passenger train)
      */
     public int getTotalMaxWeight() {
-        // TODO
+        int totalMaxWeight = 0;
 
-        return 0;
+        if (firstWagon != null && firstWagon instanceof FreightWagon) {
+            FreightWagon lastWagon = (FreightWagon) firstWagon;
+            while (lastWagon.getNextWagon() != null) {
+                totalMaxWeight += lastWagon.getMaxWeight();
+                lastWagon = (FreightWagon) lastWagon.getNextWagon();
+            }
+
+            totalMaxWeight += lastWagon.getMaxWeight();
+        }
+
+        return totalMaxWeight;
     }
 
     /**
@@ -117,9 +127,16 @@ public class Train {
      * (return null if the position is not valid for this train)
      */
     public Wagon findWagonAtPosition(int position) {
-        // TODO
+        Wagon lastWagon = firstWagon;
+        int currentPosition = 0;
 
-        return null;
+        while (lastWagon != null && lastWagon.getNextWagon() != null) {
+            lastWagon = lastWagon.getNextWagon();
+            currentPosition++;
+            if (currentPosition == position) break;
+        }
+
+        return currentPosition == position ? lastWagon : null;
     }
 
     /**
@@ -207,9 +224,25 @@ public class Train {
      * @return whether the move could be completed successfully
      */
     public boolean splitAtPosition(int position, Train toTrain) {
-        // TODO
 
-        return false;
+        //returns false if the trains are not compatible
+        if ((isFreightTrain() && !(toTrain.isFreightTrain())) || (isPassengerTrain() && !(toTrain.isPassengerTrain())))
+            return false;
+
+        Wagon wagon = findWagonAtPosition(position);
+        //returns false if the position is not valid
+        if (wagon == null)
+            return false;
+
+        //returns false if the engine of toTrain has insufficient capacity
+        if (toTrain.getEngine().getMaxWagons() < (getNumberOfWagons() - position))
+            return false;
+
+        //splits the train and moves the cut-off trains to the new train
+        toTrain.attachToRear(wagon);
+        //todo prev/next
+
+        return true;
     }
 
     /**
@@ -223,8 +256,6 @@ public class Train {
         // TODO
 
     }
-
-    // TODO
 
     /**
      * Tries to attach the given sequence of wagons to the rear of the train
@@ -279,6 +310,7 @@ public class Train {
             sb.append(lastWagon.toString());
             lastWagon = lastWagon.getNextWagon();
         }
+        sb.append(lastWagon.toString());
 
         return sb.toString();
     }
