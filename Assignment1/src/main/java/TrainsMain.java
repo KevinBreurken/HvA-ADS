@@ -20,17 +20,21 @@ public class TrainsMain {
         amsterdamParis.attachToRear(new PassengerWagon(8007,44));
         System.out.println(amsterdamParis);
 
-        System.out.println("Total number of seats: " + amsterdamParis.getTotalNumberOfSeats());
-        System.out.println("\nConfigurator result:");
-
-        Locomotive vanGogh = new Locomotive(63427, 6);
-        Train amsterdamLondon = new Train(vanGogh, "Amsterdam", "London");
-
-        amsterdamParis.splitAtPosition(4, amsterdamLondon);
-
         //my code
-        System.out.println(amsterdamParis);
-        System.out.println(amsterdamLondon);
+        System.out.println(amsterdamParis.canAttach(new FreightWagon(293, 1200)));
+        System.out.println(amsterdamParis.canAttach(new PassengerWagon(1200,12)));
+
+//        System.out.println("Total number of seats: " + amsterdamParis.getTotalNumberOfSeats());
+//        System.out.println("\nConfigurator result:");
+//
+//        Locomotive vanGogh = new Locomotive(63427, 6);
+//        Train amsterdamLondon = new Train(vanGogh, "Amsterdam", "London");
+//
+//        amsterdamParis.splitAtPosition(4, amsterdamLondon);
+//
+//        //my code
+//        System.out.println(amsterdamParis);
+//        System.out.println(amsterdamLondon);
 
 //        amsterdamLondon.reverse();
 //        amsterdamLondon.insertAtFront(new FreightWagon(9001, 50000));

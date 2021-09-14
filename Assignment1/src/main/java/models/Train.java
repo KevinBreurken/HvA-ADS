@@ -178,9 +178,14 @@ public class Train {
      * @return
      */
     public boolean canAttach(Wagon wagon) {
-        // TODO
+        if ((isFreightTrain() && !(wagon instanceof FreightWagon))
+                || (isPassengerTrain() && !(wagon instanceof PassengerWagon)))
+            return false;
 
-        return false;
+        if (getEngine().getMaxWagons() < (getNumberOfWagons() + wagon.getTailLength()+1))
+             return false;
+
+        return true;
     }
 
     /**
@@ -243,17 +248,20 @@ public class Train {
     public boolean splitAtPosition(int position, Train toTrain) {
 
         //returns false if the trains are not compatible
-        if ((isFreightTrain() && !(toTrain.isFreightTrain())) || (isPassengerTrain() && !(toTrain.isPassengerTrain())))
-            return false;
+//        if ((isFreightTrain() && !(toTrain.isFreightTrain())) || (isPassengerTrain() && !(toTrain.isPassengerTrain())))
+//            return false;
+
+        if (!hasWagons()) return false;
+
+        if (toTrain.canAttach(getFirstWagon())) {
+
+        }
 
         Wagon wagon = findWagonAtPosition(position);
         //returns false if the position is not valid
         if (wagon == null)
             return false;
-
-        //returns false if the engine of toTrain has insufficient capacity
-        if (toTrain.getEngine().getMaxWagons() < (getNumberOfWagons() - position))
-            return false;
+        
 
         //splits the train and moves the cut-off trains to the new train
         toTrain.attachToRear(wagon);
