@@ -14,5 +14,14 @@ public class Locomotive {
         return maxWagons;
     }
 
-    // TODO
+
+    // TODO toString
+    @Override
+    public String toString() {
+        return "Locomotive{" +
+                "locNumber=" + locNumber +
+                ", maxWagons=" + maxWagons +
+                '}';
+    }
+
 }
