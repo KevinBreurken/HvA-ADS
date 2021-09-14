@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * TRAIN - PREVIOUS_WAGON - THIS_WAGON - NEXT_WAGON
+ */
 public abstract class Wagon {
     protected int id;               // some unique ID of a Wagon
     private Wagon nextWagon;        // another wagon that is appended at the tail of this wagon
@@ -58,9 +61,11 @@ public abstract class Wagon {
      * @return the wagon
      */
     public Wagon getLastWagonAttached() {
-        // TODO find the last wagon in the sequence
-
-        return null;
+        Wagon lastwagon = this;
+        while (lastwagon.getNextWagon() != null) {
+            lastwagon = lastwagon.getNextWagon();
+        }
+        return lastwagon;
     }
 
     /**
@@ -68,9 +73,15 @@ public abstract class Wagon {
      * excluding this wagon itself.
      */
     public int getTailLength() {
-        // TODO traverse the tail and find its length
+        int currentAmount = 0;
+        //Iterate until we are at the end of the wagons.
+        Wagon lastwagon = this;
+        while (lastwagon.getNextWagon() != null) {
+            lastwagon = lastwagon.getNextWagon();
+            currentAmount++;
+        }
 
-        return 0;
+        return currentAmount;
     }
 
     /**
@@ -128,7 +139,7 @@ public abstract class Wagon {
         // TODO attach this wagon to its new predecessor front (sustaining the invariant propositions).
     }
 
-    /**
+    /*
      * Removes this wagon from the sequence that it is part of,
      * and reconnects its tail to the wagon in front of it, if it exists.
      */
@@ -147,18 +158,17 @@ public abstract class Wagon {
     public Wagon reverseSequence() {
         // TODO provide an iterative implementation,
         //   using attach- and detach methods of this class
-
         return null;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("\tWagon: %d\n",id));
-        if(nextWagon != null)
-            sb.append(String.format("\t\tnext: %s\n",nextWagon.id));
-        if(previousWagon != null)
-            sb.append(String.format("\t\tprevious: %s\n",previousWagon.id));
+        sb.append(String.format("\tWagon: %d\n", id));
+        if (nextWagon != null)
+            sb.append(String.format("\t\tnext: %s\n", nextWagon.id));
+        if (previousWagon != null)
+            sb.append(String.format("\t\tprevious: %s\n", previousWagon.id));
         return sb.toString();
     }
 }
