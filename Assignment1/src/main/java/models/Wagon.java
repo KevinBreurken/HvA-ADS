@@ -93,9 +93,12 @@ public abstract class Wagon {
      * @throws IllegalStateException if tail is already attached to a wagon in front of it.
      */
     public void attachTail(Wagon tail) {
-        // TODO verify the exceptions
+        //checks if the wagons can be attached
+        if (hasNextWagon()) throw new IllegalStateException("Current wagon already has a next wagon!");
+        if (tail.hasPreviousWagon()) throw new IllegalStateException("Tail wagon already has a previous wagon!");
 
-        // TODO attach the tail wagon to this wagon (sustaining the invariant propositions).
+        //Attaches the tail wagon to this wagon (sustaining the invariant propositions).
+        tail.reAttachTo(this);
     }
 
     /**
@@ -134,9 +137,13 @@ public abstract class Wagon {
      * @param front the wagon to which this wagon must be attached to.
      */
     public void reAttachTo(Wagon front) {
-        // TODO detach any existing connections that will be rearranged
+        //Detaches any existing connections that will be rearranged
+        previousWagon.setNextWagon(null);
+        front.getNextWagon().setPreviousWagon(null);
 
-        // TODO attach this wagon to its new predecessor front (sustaining the invariant propositions).
+        //Attaches this wagon to its new predecessor front (sustaining the invariant propositions).
+        front.setNextWagon(this);
+        setPreviousWagon(front);
     }
 
     /*
