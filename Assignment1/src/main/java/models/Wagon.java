@@ -31,7 +31,6 @@ public abstract class Wagon {
 
     public void setNextWagon(Wagon nextWagon) {
         this.nextWagon = nextWagon;
-        nextWagon.setPreviousWagon(this);
     }
 
     public Wagon getPreviousWagon() {
