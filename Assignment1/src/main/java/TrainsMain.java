@@ -6,7 +6,7 @@ public class TrainsMain {
 
         System.out.println("Welcome to the HvA trains configurator");
 
-        Locomotive rembrandt = new Locomotive(24531, 7);
+        Locomotive rembrandt = new Locomotive(24531, 200);
         Train amsterdamParis = new Train(rembrandt, "Amsterdam", "Paris");
         System.out.println(amsterdamParis.hasWagons());;
 
@@ -20,15 +20,21 @@ public class TrainsMain {
         amsterdamParis.attachToRear(new PassengerWagon(8007,44));
         System.out.println(amsterdamParis);
 
+
+        Locomotive vanGogh = new Locomotive(63427, 6);
+        Train amsterdamLondon = new Train(vanGogh, "Amsterdam", "London");
+        amsterdamLondon.attachToRear(new PassengerWagon(907,44));
+        amsterdamLondon.attachToRear(new PassengerWagon(906,44));
+
+        System.out.println(amsterdamParis.insertAtFront(amsterdamLondon.getFirstWagon()));
+        System.out.println(amsterdamParis);
         //my code
-        System.out.println(amsterdamParis.canAttach(new FreightWagon(293, 1200)));
-        System.out.println(amsterdamParis.canAttach(new PassengerWagon(1200,12)));
+//        System.out.println(amsterdamParis.canAttach(new FreightWagon(293, 1200)));
+//        System.out.println(amsterdamParis.canAttach(new PassengerWagon(1200,12)));
 
 //        System.out.println("Total number of seats: " + amsterdamParis.getTotalNumberOfSeats());
 //        System.out.println("\nConfigurator result:");
 //
-//        Locomotive vanGogh = new Locomotive(63427, 6);
-//        Train amsterdamLondon = new Train(vanGogh, "Amsterdam", "London");
 //
 //        amsterdamParis.splitAtPosition(4, amsterdamLondon);
 //

@@ -23,11 +23,11 @@ public class Train {
     }
 
     public boolean isPassengerTrain() {
-        return firstWagon instanceof PassengerWagon || firstWagon == null;
+        return firstWagon instanceof PassengerWagon || hasWagons();
     }
 
     public boolean isFreightTrain() {
-        return firstWagon instanceof FreightWagon || firstWagon == null;
+        return firstWagon instanceof FreightWagon || hasWagons();
     }
 
     public Locomotive getEngine() {
@@ -162,7 +162,7 @@ public class Train {
         Wagon currentWagon = firstWagon;
 
         do {
-            if (currentWagon.getId() ==  wagonId) return currentWagon;
+            if (currentWagon.getId() == wagonId) return currentWagon;
             currentWagon = currentWagon.getNextWagon();
         } while (currentWagon != null);
 
@@ -182,8 +182,8 @@ public class Train {
                 || (isPassengerTrain() && !(wagon instanceof PassengerWagon)))
             return false;
 
-        if (getEngine().getMaxWagons() < (getNumberOfWagons() + wagon.getTailLength()+1))
-             return false;
+        if (getEngine().getMaxWagons() < (getNumberOfWagons() + wagon.getTailLength() + 1))
+            return false;
 
         return true;
     }
@@ -197,9 +197,15 @@ public class Train {
      * @return whether the insertion could be completed successfully
      */
     public boolean insertAtFront(Wagon wagon) {
-        // TODO
+        if (!canAttach(wagon)) return false;
 
-        return false;
+        Wagon lastWagonOfNewGroup = wagon.getLastWagonAttached();
+
+        lastWagonOfNewGroup.setNextWagon(getFirstWagon());
+        getFirstWagon().setPreviousWagon(lastWagonOfNewGroup);
+        setFirstWagon(wagon);
+
+        return true;
     }
 
     /**
@@ -212,9 +218,20 @@ public class Train {
      * @return whether the insertion could be completed successfully
      */
     public boolean insertAtPosition(int position, Wagon wagon) {
-        // TODO
+        if (!canAttach(wagon)) return false;
 
-        return false;
+        //Check if the position exists
+        int currentLength = getFirstWagon().getTailLength() + 1;
+        if (position <= 0 || position > currentLength) return false;
+
+        //Attach 3c - 1B
+        Wagon lastWagonOfNewGroup = wagon.getLastWagonAttached();
+        Wagon firstOfOriginalTail = findWagonAtPosition(position);
+        lastWagonOfNewGroup.setNextWagon(firstOfOriginalTail);
+        firstOfOriginalTail.setPreviousWagon((lastWagonOfNewGroup));
+        //Attach 3c - 1B
+
+        return true;
     }
 
     /**
@@ -261,7 +278,7 @@ public class Train {
         //returns false if the position is not valid
         if (wagon == null)
             return false;
-        
+
 
         //splits the train and moves the cut-off trains to the new train
         toTrain.attachToRear(wagon);
@@ -298,6 +315,7 @@ public class Train {
         if (lastWagon == null) {
             setFirstWagon(wagon);
         } else {
+            wagon.setPreviousWagon(lastWagon);
             lastWagon.setNextWagon(wagon);
         }
 

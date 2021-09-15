@@ -31,6 +31,7 @@ public abstract class Wagon {
 
     public void setNextWagon(Wagon nextWagon) {
         this.nextWagon = nextWagon;
+        nextWagon.setPreviousWagon(this);
     }
 
     public Wagon getPreviousWagon() {
@@ -165,10 +166,10 @@ public abstract class Wagon {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("\tWagon: %d\n", id));
-        if (nextWagon != null)
-            sb.append(String.format("\t\tnext: %s\n", nextWagon.id));
         if (previousWagon != null)
             sb.append(String.format("\t\tprevious: %s\n", previousWagon.id));
+        if (nextWagon != null)
+            sb.append(String.format("\t\tnext: %s\n", nextWagon.id));
         return sb.toString();
     }
 }
