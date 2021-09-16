@@ -108,8 +108,12 @@ public abstract class Wagon {
      * or <code>null</code> if it had no wagons attached to its tail.
      */
     public Wagon detachTail() {
-        // TODO detach the tail from this wagon (sustaining the invariant propositions).
-        //  and return the head wagon of that tail
+        Wagon nextWagon =  getNextWagon();
+
+        if(hasNextWagon()) {
+            setNextWagon(null);
+            return nextWagon.detachFront();
+        }
 
         return null;
     }
@@ -122,8 +126,12 @@ public abstract class Wagon {
      * or <code>null</code> if it had no previousWagon.
      */
     public Wagon detachFront() {
-        // TODO detach this wagon from its predecessor (sustaining the invariant propositions).
-        //   and return that predecessor
+        Wagon previousWagon =  getPreviousWagon();
+
+        if(hasPreviousWagon()) {
+            setPreviousWagon(null);
+            return previousWagon.detachTail();
+        }
 
         return null;
     }
