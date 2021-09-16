@@ -347,9 +347,7 @@ public class Train {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Train: %s, %s\n", origin, destination));
-        sb.append("Wagons:\n");
-
+        sb.append(getEngine().toString());
         Wagon lastWagon = getFirstWagon();
         while (lastWagon != null && lastWagon.getNextWagon() != null) {
             sb.append(lastWagon.toString());

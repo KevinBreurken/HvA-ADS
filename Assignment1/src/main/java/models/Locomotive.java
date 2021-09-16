@@ -14,14 +14,9 @@ public class Locomotive {
         return maxWagons;
     }
 
-
-    // TODO toString
     @Override
     public String toString() {
-        return "Locomotive{" +
-                "locNumber=" + locNumber +
-                ", maxWagons=" + maxWagons +
-                '}';
+        return String.format("[Loc-%d]",locNumber);
     }
 
 }

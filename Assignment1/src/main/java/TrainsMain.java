@@ -11,6 +11,7 @@ public class TrainsMain {
         System.out.println(amsterdamParis.hasWagons());;
 
         amsterdamParis.attachToRear(new PassengerWagon(8001,32));
+
         amsterdamParis.attachToRear(new PassengerWagon(8002,32));
         amsterdamParis.attachToRear(new PassengerWagon(8003,18));
         amsterdamParis.attachToRear(new PassengerWagon(8004,44));

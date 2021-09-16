@@ -184,6 +184,8 @@ public abstract class Wagon {
             sb.append(String.format("\t\tprevious: %s\n", previousWagon.id));
         if (nextWagon != null)
             sb.append(String.format("\t\tnext: %s\n", nextWagon.id));
-        return sb.toString();
+//        return sb.toString();
+
+        return String.format("[Wagon-%d]",getId());
     }
 }
