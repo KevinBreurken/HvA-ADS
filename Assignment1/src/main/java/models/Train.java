@@ -355,6 +355,8 @@ public class Train {
         }
         sb.append(lastWagon.toString());
 
+        sb.append(String.format(" with %d wagons from %s to %s",getNumberOfWagons(),origin,destination));
+
         return sb.toString();
     }
 }
