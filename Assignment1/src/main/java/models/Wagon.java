@@ -62,7 +62,7 @@ public abstract class Wagon {
      */
     public Wagon getLastWagonAttached() {
         Wagon lastwagon = this;
-        while (lastwagon.getNextWagon() != null) {
+        while (lastwagon.hasNextWagon()) {
             lastwagon = lastwagon.getNextWagon();
         }
         return lastwagon;
@@ -76,7 +76,7 @@ public abstract class Wagon {
         int currentAmount = 0;
         //Iterate until we are at the end of the wagons.
         Wagon lastwagon = this;
-        while (lastwagon.getNextWagon() != null) {
+        while (lastwagon.hasNextWagon()) {
             lastwagon = lastwagon.getNextWagon();
             currentAmount++;
         }
