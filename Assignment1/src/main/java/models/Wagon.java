@@ -147,9 +147,9 @@ public abstract class Wagon {
     public void reAttachTo(Wagon front) {
 
         //Check if the wagon already exists in the wagon we want to attach to.
-        Wagon lastwagon = this;
+        Wagon lastwagon = this; //b
         while (lastwagon.hasNextWagon()) {
-            if(lastwagon == front)
+            if(lastwagon.toString().equals(front.toString()))
                 System.err.println("Can't attach wagon to child wagon.");
                 lastwagon = lastwagon.getNextWagon();
         }
