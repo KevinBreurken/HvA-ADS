@@ -200,6 +200,9 @@ public class Train {
      * @return whether the insertion could be completed successfully
      */
     public boolean insertAtFront(Wagon wagon) {
+        if(findWagonById(wagon.id) != null)
+            return false;
+
         if (!canAttach(wagon)) return false;
 
         if(!hasWagons()){
@@ -238,6 +241,7 @@ public class Train {
      */
     public boolean insertAtPosition(int position, Wagon wagon) {
         if(!hasWagons()){
+            if (position > 1) return false;
             attachToRear(wagon);
             return true;
         }
@@ -346,7 +350,7 @@ public class Train {
     }
 
     public boolean attachToRear(PassengerWagon wagon) {
-        if (!hasWagons() || getFirstWagon() instanceof PassengerWagon) {
+        if (!hasWagons() || canAttach(wagon)) {
             attachToRear((Wagon) wagon);
             return true;
         }
@@ -354,7 +358,7 @@ public class Train {
     }
 
     public boolean attachToRear(FreightWagon wagon) {
-        if (!hasWagons() || getFirstWagon() instanceof FreightWagon) {
+        if (!hasWagons() || canAttach(wagon)) {
             attachToRear((Wagon) wagon);
             return true;
         }

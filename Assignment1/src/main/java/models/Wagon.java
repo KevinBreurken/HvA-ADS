@@ -94,8 +94,8 @@ public abstract class Wagon {
      */
     public void attachTail(Wagon tail) {
         //checks if the wagons can be attached
-        if (hasNextWagon()) throw new IllegalStateException("Current wagon already has a next wagon!");
-        if (tail.hasPreviousWagon()) throw new IllegalStateException("Tail wagon already has a previous wagon!");
+        if (hasNextWagon()) throw new IllegalStateException(this + " : " + tail + " wagon already has a next wagon!");
+        if (tail.hasPreviousWagon()) throw new IllegalStateException(this + " : " + tail + "wagon already has a previous wagon!");
 
         //Attaches the tail wagon to this wagon (sustaining the invariant propositions).
         tail.reAttachTo(this);
@@ -155,8 +155,10 @@ public abstract class Wagon {
         }
 
         //Detaches any existing connections that will be rearranged
-        if (hasPreviousWagon())
+        if (hasPreviousWagon()) {
             previousWagon.setNextWagon(null);
+            setPreviousWagon(null);
+        }
 
         //Attaches this wagon to its new predecessor front (sustaining the invariant propositions).
         front.setNextWagon(this);
@@ -259,4 +261,11 @@ public abstract class Wagon {
 
         return String.format("[Wagon-%d]", getId());
     }
+
+//    @Override
+//    public String toString() {
+//        return "Wagon{" +
+//                "id=" + id +
+//                '}';
+//    }
 }
