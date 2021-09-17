@@ -145,9 +145,12 @@ public abstract class Wagon {
      * @param front the wagon to which this wagon must be attached to.
      */
     public void reAttachTo(Wagon front) {
+        // 1 2 3 4 5 6
+        //
+
         //Detaches any existing connections that will be rearranged
-        previousWagon.setNextWagon(null);
-        front.getNextWagon().setPreviousWagon(null);
+        if(hasPreviousWagon())
+            previousWagon.setNextWagon(null);
 
         //Attaches this wagon to its new predecessor front (sustaining the invariant propositions).
         front.setNextWagon(this);
@@ -159,7 +162,17 @@ public abstract class Wagon {
      * and reconnects its tail to the wagon in front of it, if it exists.
      */
     public void removeFromSequence() {
-        // TODO
+        Wagon wagonPrevious = getPreviousWagon();
+        Wagon wagonNext = getNextWagon();
+
+        //removes the Wagon from the sequence
+        detachFront();
+        detachTail();
+
+        //attaches the previous and next from the removed object to each other if possible
+        if (wagonPrevious != null && wagonNext != null)
+            wagonPrevious.reAttachTo(wagonNext);
+
     }
 
 
@@ -171,9 +184,61 @@ public abstract class Wagon {
      * @return the new start Wagon of the reversed sequence (with is the former last Wagon of the original sequence)
      */
     public Wagon reverseSequence() {
+        Wagon formerLastWagon = getLastWagonAttached(); //return 5
         // TODO provide an iterative implementation,
         //   using attach- and detach methods of this class
-        return null;
+
+        // 1 || 2 - 3 - 4 - 5
+        // 1 || 5 - 2 - 3 - 4
+        // 1 || 4 - 5 - 2 - 3
+        // 1 || 5 - 4 - 3 - 2
+
+        Wagon lastBeforeReverse = getPreviousWagon();
+        detachFront();
+
+        Wagon currentWagon = this;
+        Wagon wagonToMove = formerLastWagon;
+
+        while (currentWagon != formerLastWagon) {
+            wagonToMove.setPreviousWagon(null);
+            currentWagon.reAttachTo(wagonToMove);
+
+            currentWagon = wagonToMove;
+            wagonToMove = wagonToMove.getLastWagonAttached();
+        }
+
+        currentWagon.reAttachTo(lastBeforeReverse);
+
+        return currentWagon;
+    }
+
+    public Wagon test(){
+
+        Wagon previousWagonOnStart = getPreviousWagon();
+        // 3 - 2 - this - 4 - 5
+        Wagon currentcheckWagon = this;
+        Wagon lastPutToFront = null; // Keep a record of the last wagon we put to the front
+
+        while (currentcheckWagon.hasNextWagon()){
+
+            if(lastPutToFront != null)
+                currentcheckWagon.getNextWagon().reAttachTo(lastPutToFront);
+            else
+                currentcheckWagon.getNextWagon().reAttachTo(currentcheckWagon);
+
+
+            lastPutToFront = currentcheckWagon.getNextWagon();
+
+            System.out.println(currentcheckWagon);
+            currentcheckWagon = currentcheckWagon.getNextWagon();
+        }
+
+        if(previousWagonOnStart != null){
+            previousWagonOnStart.reAttachTo(lastPutToFront);
+        }
+
+        //return lastPutToFront;
+        return previousWagonOnStart;
     }
 
     @Override

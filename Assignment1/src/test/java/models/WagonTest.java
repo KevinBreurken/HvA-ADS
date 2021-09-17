@@ -198,6 +198,8 @@
 //        // Two separate sequences!
 //        passengerWagon1.attachTail(passengerWagon2);
 //        passengerWagon3.attachTail(passengerWagon4);
+//        //1-2
+//        // 3-4
 //
 //        passengerWagon4.reAttachTo(passengerWagon2);
 //
