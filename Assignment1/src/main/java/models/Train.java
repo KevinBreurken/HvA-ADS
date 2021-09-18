@@ -180,15 +180,18 @@ public class Train {
      */
     public boolean canAttach(Wagon wagon) {
         //Check if the wagon is of the same type.
-        if ((isFreightTrain() && !(wagon instanceof FreightWagon))
-                || (isPassengerTrain() && !(wagon instanceof PassengerWagon)))
-            return false;
+        if (!isCompatible(wagon)) return false;
 
         //Check if the new group of wagons can fit the maximum amount.
         if (getEngine().getMaxWagons() < (getNumberOfWagons() + wagon.getTailLength() + 1))
             return false;
 
         return true;
+    }
+
+    private boolean isCompatible(Wagon wagon) {
+        return (!isFreightTrain() || wagon instanceof FreightWagon)
+                && (!isPassengerTrain() || wagon instanceof PassengerWagon);
     }
 
     /**
@@ -273,9 +276,20 @@ public class Train {
      * @return whether the move could be completed successfully
      */
     public boolean moveOneWagon(int wagonId, Train toTrain) {
-        // TODO
+        Wagon wagonToMove = findWagonById(wagonId);
+        System.out.println(wagonToMove);
 
-        return false;
+        if (wagonToMove == null) return false;
+        if (!toTrain.isCompatible(wagonToMove)) return false;
+        if (toTrain.getEngine().getMaxWagons() < toTrain.getNumberOfWagons() + 1) return false;
+
+        if (getFirstWagon() == wagonToMove) setFirstWagon(wagonToMove.getNextWagon());
+
+        wagonToMove.removeFromSequence();
+        toTrain.attachToRear(wagonToMove);
+        if(getFirstWagon() == wagonToMove) setFirstWagon(null);
+
+        return true;
     }
 
     /**
@@ -290,26 +304,20 @@ public class Train {
      * @return whether the move could be completed successfully
      */
     public boolean splitAtPosition(int position, Train toTrain) {
-
-        //returns false if the trains are not compatible
-//        if ((isFreightTrain() && !(toTrain.isFreightTrain())) || (isPassengerTrain() && !(toTrain.isPassengerTrain())))
-//            return false;
-
         if (!hasWagons()) return false;
 
-        if (toTrain.canAttach(getFirstWagon())) {
+        Wagon wagonAtPosition = findWagonAtPosition(position);
 
-        }
+        if (wagonAtPosition == null) return false;
+        if (!toTrain.canAttach(wagonAtPosition)) return false;
 
-        Wagon wagon = findWagonAtPosition(position);
-        //returns false if the position is not valid
-        if (wagon == null)
-            return false;
+        wagonAtPosition.detachFront();
+        if(position == 1)
+            setFirstWagon(null);
 
-
-        //splits the train and moves the cut-off trains to the new train
-        toTrain.attachToRear(wagon);
-        //todo prev/next
+        if (toTrain.hasWagons())
+            wagonAtPosition.reAttachTo(toTrain.getLastWagonAttached());
+        else toTrain.setFirstWagon(wagonAtPosition);
 
         return true;
     }
@@ -322,8 +330,12 @@ public class Train {
      * (No change if the train has no wagons or only one wagon)
      */
     public void reverse() {
-        // TODO
-
+        if(!hasWagons()) return;
+        
+        Wagon wagonToReverse = getFirstWagon();
+        wagonToReverse.detachFront();
+        setFirstWagon(null);
+        attachToRear(wagonToReverse.reverseSequence());
     }
 
     /**

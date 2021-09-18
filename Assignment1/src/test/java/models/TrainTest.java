@@ -112,7 +112,6 @@ public class TrainTest {
         // check final wagon
         assertEquals( 40, ((PassengerWagon) passengerTrain.getLastWagonAttached()).getNumberOfSeats());
         assertEquals( 30000, ((FreightWagon) freightTrain.getLastWagonAttached()).getMaxWeight());
-        System.out.println(passengerTrain);
 
         // check toString
         assertTrue(freightTrain.toString().indexOf(" from Amsterdam to Berlin") > 0);
@@ -212,6 +211,7 @@ public class TrainTest {
         assertTrue(trainWithoutWagons.moveOneWagon(8006, passengerTrain));
         assertEquals(2, trainWithoutWagons.getNumberOfWagons());
         assertEquals(5, passengerTrain.getNumberOfWagons());
+        System.out.println(passengerTrain);
         assertEquals(8006, passengerTrain.findWagonAtPosition(5).getId());
     }
 
@@ -224,7 +224,11 @@ public class TrainTest {
         train.attachToRear(firstWagon);
         train.attachToRear(lastWagon);
 
+        //train 13 14
+        //passengerTrain
         assertTrue(train.moveOneWagon(13, passengerTrain));
+        //train 13
+        //passengerTrain 13
 
         assertEquals(1, train.getNumberOfWagons());
         assertEquals(lastWagon, train.getFirstWagon());
