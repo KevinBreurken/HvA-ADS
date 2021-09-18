@@ -200,12 +200,12 @@ public class Train {
      * @return whether the insertion could be completed successfully
      */
     public boolean insertAtFront(Wagon wagon) {
-        if(findWagonById(wagon.id) != null)
+        if (findWagonById(wagon.id) != null)
             return false;
 
         if (!canAttach(wagon)) return false;
 
-        if(!hasWagons()){
+        if (!hasWagons()) {
             setFirstWagon(wagon);
             return true;
         }
@@ -240,7 +240,7 @@ public class Train {
      * @return whether the insertion could be completed successfully
      */
     public boolean insertAtPosition(int position, Wagon wagon) {
-        if(!hasWagons()){
+        if (!hasWagons()) {
             if (position > 1) return false;
             attachToRear(wagon);
             return true;
@@ -370,14 +370,12 @@ public class Train {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getEngine().toString());
-        Wagon lastWagon = getFirstWagon();
-        while (lastWagon != null && lastWagon.getNextWagon() != null) {
-            sb.append(lastWagon.toString());
-            lastWagon = lastWagon.getNextWagon();
-        }
-        sb.append(lastWagon.toString());
 
-        sb.append(String.format(" with %d wagons from %s to %s",getNumberOfWagons(),origin,destination));
+        if (hasWagons()) {
+            sb.append(getFirstWagon());
+        }
+
+        sb.append(String.format(" with %d wagons from %s to %s", getNumberOfWagons(), origin, destination));
 
         return sb.toString();
     }

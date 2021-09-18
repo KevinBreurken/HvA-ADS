@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 /**
  * TRAIN - PREVIOUS_WAGON - THIS_WAGON - NEXT_WAGON
  */
@@ -95,7 +97,8 @@ public abstract class Wagon {
     public void attachTail(Wagon tail) {
         //checks if the wagons can be attached
         if (hasNextWagon()) throw new IllegalStateException(this + " : " + tail + " wagon already has a next wagon!");
-        if (tail.hasPreviousWagon()) throw new IllegalStateException(this + " : " + tail + "wagon already has a previous wagon!");
+        if (tail.hasPreviousWagon())
+            throw new IllegalStateException(this + " : " + tail + "tail wagon already has a previous wagon!");
 
         //Attaches the tail wagon to this wagon (sustaining the invariant propositions).
         tail.reAttachTo(this);
@@ -130,7 +133,8 @@ public abstract class Wagon {
 
         if (hasPreviousWagon()) {
             setPreviousWagon(null);
-            return previousWagon.detachTail();
+            previousWagon.detachTail();
+            return previousWagon;
         }
 
         return null;
@@ -149,9 +153,9 @@ public abstract class Wagon {
         //Check if the wagon already exists in the wagon we want to attach to.
         Wagon lastwagon = this; //b
         while (lastwagon.hasNextWagon()) {
-            if(lastwagon.toString().equals(front.toString()))
+            if (lastwagon.toString().equals(front.toString()))
                 System.err.println("Can't attach wagon to child wagon.");
-                lastwagon = lastwagon.getNextWagon();
+            lastwagon = lastwagon.getNextWagon();
         }
 
         //Detaches any existing connections that will be rearranged
@@ -179,7 +183,7 @@ public abstract class Wagon {
 
         //attaches the previous and next from the removed object to each other if possible
         if (wagonPrevious != null && wagonNext != null)
-            wagonPrevious.reAttachTo(wagonNext);
+            wagonNext.reAttachTo(wagonPrevious);
 
     }
 
@@ -192,80 +196,38 @@ public abstract class Wagon {
      * @return the new start Wagon of the reversed sequence (with is the former last Wagon of the original sequence)
      */
     public Wagon reverseSequence() {
-        Wagon formerLastWagon = getLastWagonAttached(); //return 5
-        // TODO provide an iterative implementation,
-        //   using attach- and detach methods of this class
 
-        // 1 || 2 - 3 - 4 - 5
-        // 1 || 5 - 2 - 3 - 4
-        // 1 || 4 - 5 - 2 - 3
-        // 1 || 5 - 4 - 3 - 2
+        Wagon previousWagonOnStart = detachFront();
+        Wagon lastBeforeReverse = getLastWagonAttached(); // The last wagon will be the first wagon at the end.
 
-        Wagon lastBeforeReverse = getPreviousWagon();
-        detachFront();
-
-        Wagon currentWagon = this;
-        Wagon wagonToMove = formerLastWagon;
-
-        while (currentWagon != formerLastWagon) {
-            wagonToMove.setPreviousWagon(null);
-            currentWagon.reAttachTo(wagonToMove);
-
-            currentWagon = wagonToMove;
-            wagonToMove = wagonToMove.getLastWagonAttached();
-        }
-
-        currentWagon.reAttachTo(lastBeforeReverse);
-
-        return currentWagon;
-    }
-
-    public Wagon test() {
-
-        Wagon previousWagonOnStart = getPreviousWagon();
-        // 3 - 2 - this - 4 - 5
-        Wagon currentcheckWagon = this;
+        Wagon anchorWagon = this;
         Wagon lastPutToFront = null; // Keep a record of the last wagon we put to the front
 
-        while (currentcheckWagon.hasNextWagon()) {
 
-            if (lastPutToFront != null)
-                currentcheckWagon.getNextWagon().reAttachTo(lastPutToFront);
-            else
-                currentcheckWagon.getNextWagon().reAttachTo(currentcheckWagon);
+        while (anchorWagon.hasNextWagon()) {
+            Wagon wagonToPutToFront = anchorWagon.getNextWagon();
+            wagonToPutToFront.removeFromSequence();
 
+            wagonToPutToFront.attachTail(Objects.requireNonNullElse(lastPutToFront, anchorWagon));
 
-            lastPutToFront = currentcheckWagon.getNextWagon();
-
-            System.out.println(currentcheckWagon);
-            currentcheckWagon = currentcheckWagon.getNextWagon();
+            lastPutToFront = wagonToPutToFront;
         }
 
-        if (previousWagonOnStart != null) {
-            previousWagonOnStart.reAttachTo(lastPutToFront);
-        }
+        // Attach it back to the start previous wagon if it exists
+        if (previousWagonOnStart != null)
+            lastPutToFront.reAttachTo(previousWagonOnStart);
 
-        //return lastPutToFront;
-        return previousWagonOnStart;
+        return lastBeforeReverse;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("\tWagon: %d\n", id));
-        if (previousWagon != null)
-            sb.append(String.format("\t\tprevious: %s\n", previousWagon.id));
+        sb.append(String.format("[Wagon-%d]", getId()));
         if (nextWagon != null)
-            sb.append(String.format("\t\tnext: %s\n", nextWagon.id));
-//        return sb.toString();
+            sb.append(nextWagon);
 
-        return String.format("[Wagon-%d]", getId());
+        return sb.toString();
     }
 
-//    @Override
-//    public String toString() {
-//        return "Wagon{" +
-//                "id=" + id +
-//                '}';
-//    }
 }
