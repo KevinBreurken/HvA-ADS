@@ -3,7 +3,9 @@ package models;
 import java.util.Objects;
 
 /**
- * TRAIN - PREVIOUS_WAGON - THIS_WAGON - NEXT_WAGON
+ * Parent class for Freight- and PassengerWagons.
+ * A Wagon can be attached to a sequence of other wagons and an Engine.
+ * Can be part of a train.
  */
 public abstract class Wagon {
     protected int id;               // some unique ID of a Wagon
@@ -149,7 +151,6 @@ public abstract class Wagon {
      * @param front the wagon to which this wagon must be attached to.
      */
     public void reAttachTo(Wagon front) {
-
         //Check if the wagon already exists in the wagon we want to attach to.
         Wagon lastwagon = this; //b
         while (lastwagon.hasNextWagon()) {
@@ -196,13 +197,11 @@ public abstract class Wagon {
      * @return the new start Wagon of the reversed sequence (with is the former last Wagon of the original sequence)
      */
     public Wagon reverseSequence() {
-
         Wagon previousWagonOnStart = detachFront();
         Wagon lastBeforeReverse = getLastWagonAttached(); // The last wagon will be the first wagon at the end.
 
         Wagon anchorWagon = this;
         Wagon lastPutToFront = null; // Keep a record of the last wagon we put to the front
-
 
         while (anchorWagon.hasNextWagon()) {
             Wagon wagonToPutToFront = anchorWagon.getNextWagon();

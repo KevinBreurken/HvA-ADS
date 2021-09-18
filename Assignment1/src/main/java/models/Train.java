@@ -277,7 +277,6 @@ public class Train {
      */
     public boolean moveOneWagon(int wagonId, Train toTrain) {
         Wagon wagonToMove = findWagonById(wagonId);
-        System.out.println(wagonToMove);
 
         if (wagonToMove == null) return false;
         if (!toTrain.isCompatible(wagonToMove)) return false;
@@ -331,7 +330,7 @@ public class Train {
      */
     public void reverse() {
         if(!hasWagons()) return;
-        
+
         Wagon wagonToReverse = getFirstWagon();
         wagonToReverse.detachFront();
         setFirstWagon(null);
@@ -376,7 +375,6 @@ public class Train {
         }
         return false;
     }
-
 
     @Override
     public String toString() {
