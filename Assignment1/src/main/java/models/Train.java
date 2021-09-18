@@ -6,18 +6,12 @@ public class Train {
     private Locomotive engine;
     private Wagon firstWagon;
 
-    /* Representation invariants:
-        firstWagon == null || firstWagon.previousWagon == null
-        engine != null
-     */
-
     public Train(Locomotive engine, String origin, String destination) {
         this.engine = engine;
         this.destination = destination;
         this.origin = origin;
     }
 
-    /* three helper methods that are usefull in other methods */
     public boolean hasWagons() {
         return firstWagon != null;
     }
@@ -286,7 +280,7 @@ public class Train {
 
         wagonToMove.removeFromSequence();
         toTrain.attachToRear(wagonToMove);
-        if(getFirstWagon() == wagonToMove) setFirstWagon(null);
+        if (getFirstWagon() == wagonToMove) setFirstWagon(null);
 
         return true;
     }
@@ -303,17 +297,19 @@ public class Train {
      * @return whether the move could be completed successfully
      */
     public boolean splitAtPosition(int position, Train toTrain) {
-        if (!hasWagons()) return false;
+        if (!hasWagons()) return false; // Do we have wagons to split?
 
         Wagon wagonAtPosition = findWagonAtPosition(position);
 
-        if (wagonAtPosition == null) return false;
-        if (!toTrain.canAttach(wagonAtPosition)) return false;
+        if (wagonAtPosition == null) return false; // Does the wagon exist?
+        if (!toTrain.canAttach(wagonAtPosition)) return false; // Can we attach these wagons to the toTrain?
 
         wagonAtPosition.detachFront();
-        if(position == 1)
+        // If the position is 1, it needs to detach itself from the train.
+        if (position == 1)
             setFirstWagon(null);
 
+        // Attach the wagon to the correct object.
         if (toTrain.hasWagons())
             wagonAtPosition.reAttachTo(toTrain.getLastWagonAttached());
         else toTrain.setFirstWagon(wagonAtPosition);
@@ -329,7 +325,7 @@ public class Train {
      * (No change if the train has no wagons or only one wagon)
      */
     public void reverse() {
-        if(!hasWagons()) return;
+        if (!hasWagons()) return;
 
         Wagon wagonToReverse = getFirstWagon();
         wagonToReverse.detachFront();
@@ -353,6 +349,7 @@ public class Train {
         if (lastWagon == null) {
             setFirstWagon(wagon);
         } else {
+            wagon.detachFront();
             wagon.setPreviousWagon(lastWagon);
             lastWagon.setNextWagon(wagon);
         }
@@ -379,13 +376,17 @@ public class Train {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
         sb.append(getEngine().toString());
 
-        if (hasWagons()) {
-            sb.append(getFirstWagon());
+        // Print each wagon attached to this train.
+        Wagon lastWagon = getFirstWagon();
+        while (lastWagon != null) {
+            sb.append(lastWagon.toString());
+            lastWagon = lastWagon.getNextWagon();
         }
 
-        sb.append(String.format(" with %d wagons from %s to %s", getNumberOfWagons(), origin, destination));
+        sb.append(String.format(" with %d wagons from %s to %s",getNumberOfWagons(),origin,destination));
 
         return sb.toString();
     }
