@@ -109,8 +109,8 @@ public abstract class Wagon {
     public Wagon detachTail() {
         if (hasNextWagon()) {
             Wagon tailWagon = getNextWagon();
-            tailWagon.detachFront(); //Call detach on the tailWagon to sustain representation invariants.
             setNextWagon(null);
+            tailWagon.detachFront(); //Call detach on the tailWagon to sustain representation invariants.
             return tailWagon;
         }
 
@@ -127,10 +127,10 @@ public abstract class Wagon {
     public Wagon detachFront() {
 
         if (hasPreviousWagon()) {
-            Wagon previousWagon = getPreviousWagon();
+            Wagon frontWagon = getPreviousWagon();
             setPreviousWagon(null);
-            previousWagon.detachTail();
-            return previousWagon;
+            frontWagon.detachTail(); //Call detach on the frontWagon to sustain representation invariants.
+            return frontWagon;
         }
 
         return null;
@@ -159,6 +159,7 @@ public abstract class Wagon {
         //Attaches this wagon to its new predecessor front (sustaining the invariant propositions).
         front.setNextWagon(this);
         setPreviousWagon(front);
+
     }
 
     /*
@@ -178,7 +179,6 @@ public abstract class Wagon {
             wagonNext.reAttachTo(wagonPrevious);
 
     }
-
 
     /**
      * Reverses the order in the sequence of wagons from this Wagon until its final successor.

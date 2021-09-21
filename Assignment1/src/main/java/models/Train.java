@@ -243,10 +243,7 @@ public class Train {
         if (position <= 0 || position > currentLength) return false;
 
         //attaches and detaches the wagons
-        Wagon lastWagonOfNewGroup = wagon.getLastWagonAttached();
-        Wagon firstOfOriginalTail = findWagonAtPosition(position);
-        lastWagonOfNewGroup.setNextWagon(firstOfOriginalTail);
-        firstOfOriginalTail.setPreviousWagon((lastWagonOfNewGroup));
+        wagon.getLastWagonAttached().attachTail(findWagonAtPosition(position));
 
         return true;
     }
@@ -351,8 +348,7 @@ public class Train {
 
         // Attach wagon to the back.
         wagon.detachFront();
-        wagon.setPreviousWagon(lastWagon);
-        lastWagon.setNextWagon(wagon);
+        lastWagon.attachTail(wagon);
 
         return true;
     }
