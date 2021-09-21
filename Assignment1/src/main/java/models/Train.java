@@ -183,6 +183,11 @@ public class Train {
         return true;
     }
 
+    /**
+     * Checks if the given Wagon is compatible with the current Train.
+     * @param wagon
+     * @return
+     */
     private boolean isCompatible(Wagon wagon) {
         return (!isFreightTrain() || wagon instanceof FreightWagon)
                 && (!isPassengerTrain() || wagon instanceof PassengerWagon);
@@ -212,18 +217,6 @@ public class Train {
         getFirstWagon().setPreviousWagon(lastWagonOfNewGroup);
 
         setFirstWagon(wagon);
-        return true;
-    }
-
-    public boolean insertAtFront(FreightWagon wagon) {
-        if (!canAttach(wagon)) return false;
-
-        Wagon lastWagonOfNewGroup = wagon.getLastWagonAttached();
-
-        lastWagonOfNewGroup.setNextWagon(getFirstWagon());
-        getFirstWagon().setPreviousWagon(lastWagonOfNewGroup);
-        setFirstWagon(wagon);
-
         return true;
     }
 
@@ -274,13 +267,15 @@ public class Train {
 
         if (wagonToMove == null) return false;
         if (!toTrain.isCompatible(wagonToMove)) return false;
+        // Can we fit this wagon on the engine?
         if (toTrain.getEngine().getMaxWagons() < toTrain.getNumberOfWagons() + 1) return false;
 
-        if (getFirstWagon() == wagonToMove) setFirstWagon(wagonToMove.getNextWagon());
+        // If we move the first wagon, attach the next wagon to the train.
+        if (getFirstWagon() == wagonToMove)
+            setFirstWagon(wagonToMove.getNextWagon());
 
         wagonToMove.removeFromSequence();
         toTrain.attachToRear(wagonToMove);
-        if (getFirstWagon() == wagonToMove) setFirstWagon(null);
 
         return true;
     }
@@ -342,35 +337,24 @@ public class Train {
      * @return whether the attachment could be completed successfully
      */
     public boolean attachToRear(Wagon wagon) {
+        if (!canAttach(wagon)) return false;
+
         if (getNumberOfWagons() == engine.getMaxWagons()) return false;
 
         Wagon lastWagon = getLastWagonAttached();
 
+        // The rear is the back of the train.
         if (lastWagon == null) {
             setFirstWagon(wagon);
-        } else {
-            wagon.detachFront();
-            wagon.setPreviousWagon(lastWagon);
-            lastWagon.setNextWagon(wagon);
+            return true;
         }
+
+        // Attach wagon to the back.
+        wagon.detachFront();
+        wagon.setPreviousWagon(lastWagon);
+        lastWagon.setNextWagon(wagon);
 
         return true;
-    }
-
-    public boolean attachToRear(PassengerWagon wagon) {
-        if (!hasWagons() || canAttach(wagon)) {
-            attachToRear((Wagon) wagon);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean attachToRear(FreightWagon wagon) {
-        if (!hasWagons() || canAttach(wagon)) {
-            attachToRear((Wagon) wagon);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -386,7 +370,7 @@ public class Train {
             lastWagon = lastWagon.getNextWagon();
         }
 
-        sb.append(String.format(" with %d wagons from %s to %s",getNumberOfWagons(),origin,destination));
+        sb.append(String.format(" with %d wagons from %s to %s", getNumberOfWagons(), origin, destination));
 
         return sb.toString();
     }

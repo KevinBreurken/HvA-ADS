@@ -8,13 +8,9 @@ import java.util.Objects;
  * Can be part of a train.
  */
 public abstract class Wagon {
-    protected int id;               // some unique ID of a Wagon
-    private Wagon nextWagon;        // another wagon that is appended at the tail of this wagon
-    // a.k.a. the successor of this wagon in a sequence
-    // set to null if no successor is connected
-    private Wagon previousWagon;    // another wagon that is prepended at the front of this wagon
-    // a.k.a. the predecessor of this wagon in a sequence
-    // set to null if no predecessor is connected
+    protected int id;
+    private Wagon nextWagon;
+    private Wagon previousWagon;
 
     public Wagon(int wagonId) {
         this.id = wagonId;
@@ -78,6 +74,7 @@ public abstract class Wagon {
         Wagon lastwagon = this;
         while (lastwagon.hasNextWagon()) {
             lastwagon = lastwagon.getNextWagon();
+            //Count every time we take a step.
             currentAmount++;
         }
 
@@ -93,12 +90,13 @@ public abstract class Wagon {
      * @throws IllegalStateException if tail is already attached to a wagon in front of it.
      */
     public void attachTail(Wagon tail) {
-        //checks if the wagons can be attached
-        if (hasNextWagon()) throw new IllegalStateException(this + " : " + tail + " wagon already has a next wagon!");
+        // Checks if the wagons can be attached
+        if (hasNextWagon())
+            throw new IllegalStateException(this + " : " + tail + " wagon already has a next wagon!");
         if (tail.hasPreviousWagon())
             throw new IllegalStateException(this + " : " + tail + "tail wagon already has a previous wagon!");
 
-        //Attaches the tail wagon to this wagon (sustaining the invariant propositions).
+        // Attaches the tail wagon to this wagon (sustaining the invariant propositions).
         tail.reAttachTo(this);
     }
 
@@ -127,9 +125,9 @@ public abstract class Wagon {
      * or <code>null</code> if it had no previousWagon.
      */
     public Wagon detachFront() {
-        Wagon previousWagon = getPreviousWagon();
 
         if (hasPreviousWagon()) {
+            Wagon previousWagon = getPreviousWagon();
             setPreviousWagon(null);
             previousWagon.detachTail();
             return previousWagon;
@@ -147,7 +145,7 @@ public abstract class Wagon {
      * @param front the wagon to which this wagon must be attached to.
      */
     public void reAttachTo(Wagon front) {
-        //Check if the wagon already exists in the wagon we want to attach to.
+        //Check if the wagon already exists in the wagon chain we want to attach to.
         Wagon lastwagon = this;
         while (lastwagon.hasNextWagon()) {
             if (lastwagon.toString().equals(front.toString()))
@@ -156,10 +154,7 @@ public abstract class Wagon {
         }
 
         //Detaches any existing connections that will be rearranged
-        if (hasPreviousWagon()) {
-            previousWagon.setNextWagon(null);
-            setPreviousWagon(null);
-        }
+        detachFront();
 
         //Attaches this wagon to its new predecessor front (sustaining the invariant propositions).
         front.setNextWagon(this);
