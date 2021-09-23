@@ -94,7 +94,7 @@ public abstract class Wagon {
         if (hasNextWagon())
             throw new IllegalStateException(this + " : " + tail + " wagon already has a next wagon!");
         if (tail.hasPreviousWagon())
-            throw new IllegalStateException(this + " : " + tail + "tail wagon already has a previous wagon!");
+            throw new IllegalStateException(this + " : " + tail + "tail wagon already has a previous wagon called " + tail.getPreviousWagon());
 
         // Attaches the tail wagon to this wagon (sustaining the invariant propositions).
         tail.reAttachTo(this);

@@ -89,6 +89,8 @@ public class WagonTest {
         t = assertThrows(IllegalStateException.class,
                 () -> { passengerWagon3.attachTail(passengerWagon2);}
         );
+
+        System.out.println(t.getMessage());
         assertTrue(t.getMessage().contains(passengerWagon1.toString()),
                 "Exception message should include the names of connected wagons");
         assertTrue(t.getMessage().contains(passengerWagon2.toString()),
