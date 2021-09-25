@@ -185,21 +185,20 @@ public class Train {
      * Verfies that the capacity of the engine is sufficient to pull the additional wagons
      *
      * @param wagon the first wagon of a sequence of wagons to be attached
-     * @return
+     * @return whether the Wagon (and its tail) can be attached to the Train/Wagons on this Train.
      */
     public boolean canAttach(Wagon wagon) {
         //Check if the wagon is of the same type.
         if (!isCompatible(wagon)) return false;
 
-        //Check if the new group of wagons can fit the maximum amount.
+        //Check if the engine can support the current Wagons and the new Wagon(s) combined.
         return getEngine().getMaxWagons() >= (getNumberOfWagons() + wagon.getTailLength() + 1);
     }
 
     /**
      * Checks if the given Wagon is compatible with the current Train.
      *
-     * @param wagon
-     * @return
+     * @return whether the Wagon is compatible with the Train
      */
     private boolean isCompatible(Wagon wagon) {
         return (!isFreightTrain() || wagon instanceof FreightWagon)
