@@ -1,5 +1,11 @@
 package models;
 
+/**
+ * Functions as singly-ended, doubly linked list for Wagons with a Locomotive object.
+ * A (sequence of) Wagon(s) can be attached to the Locomotive of this train.
+ * Always has a Locomotive and can have none or more Wagons.
+ * @author HvA HBO-ICT, Irene Doodeman, Kevin Breurken
+ */
 public class Train {
     private String origin;
     private String destination;

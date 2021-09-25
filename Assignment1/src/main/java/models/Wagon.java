@@ -4,8 +4,9 @@ import java.util.Objects;
 
 /**
  * Parent class for Freight- and PassengerWagons.
- * A Wagon can be attached to a sequence of other wagons and an Engine.
+ * A Wagon can be attached to a sequence of other wagons (or one) and a Locomotive.
  * Can be part of a train.
+ * @author HvA HBO-ICT, Irene Doodeman, Kevin Breurken
  */
 public abstract class Wagon {
     protected int id;

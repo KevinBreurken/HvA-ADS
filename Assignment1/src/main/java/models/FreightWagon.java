@@ -1,5 +1,9 @@
 package models;
 
+/**
+ * Child class of Wagon.
+ * @author HvA HBO-ICT, Irene Doodeman, Kevin Breurken
+ */
 public class FreightWagon extends Wagon {
     private int maxWeight;
 
