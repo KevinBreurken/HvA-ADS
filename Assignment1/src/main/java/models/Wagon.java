@@ -134,7 +134,7 @@ public abstract class Wagon {
     public Wagon detachFront() {
         // Detaches the front if it exists.
         if (hasPreviousWagon()) {
-            // Gets the Wagon in frontn of this one (and every Wagon attached to that one)
+            // Gets the Wagon in front of this one (and every Wagon attached to that one)
             Wagon frontWagon = getPreviousWagon();
 
             // Removes the link between this Wagon and it's front.

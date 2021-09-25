@@ -251,10 +251,10 @@ public class Train {
             return true;
         }
 
+        // Checks if the Wagon can be attached
         if (!canAttach(wagon)) return false;
-
+        // Checks if the position is valid
         int currentLength = getFirstWagon().getTailLength() + 1;
-        //Check if the position exist
         if (position <= 0 || position > currentLength) return false;
 
         // Attaches and detaches the wagons
@@ -311,13 +311,12 @@ public class Train {
 
         Wagon wagonAtPosition = findWagonAtPosition(position);
 
-        // Checks if the Wagon exists and weather the Wagon can be attached to toTrain
+        // Checks if the Wagon exists and whether the Wagon can be attached to toTrain
         if (wagonAtPosition == null || !toTrain.canAttach(wagonAtPosition)) return false;
 
         wagonAtPosition.detachFront();
         // If the position is 1, it needs to detach itself from the train.
-        if (position == 1)
-            setFirstWagon(null);
+        if (position == 1) setFirstWagon(null);
 
         // Attach the wagon to the correct object.
         if (toTrain.hasWagons())
