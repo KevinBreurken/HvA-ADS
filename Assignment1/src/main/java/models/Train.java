@@ -141,22 +141,21 @@ public class Train {
      * (return null if the position is not valid for this train)
      */
     public Wagon findWagonAtPosition(int position) {
-        if (!hasWagons()) return null;
+        // Can't find a Wagon if there aren't any.
+       // A position smaller than 1 is not possible.
+        if (!hasWagons() || position < 1) return null;
 
-        Wagon lastWagon = getFirstWagon();
+        Wagon currentWagon = getFirstWagon();
         int currentPosition = 1;
 
-        if (currentPosition == position) return lastWagon;
-
-        while (lastWagon.hasNextWagon()) {
-            lastWagon = lastWagon.getNextWagon();
+        while (currentWagon.hasNextWagon() && currentPosition != position) {
+           // Moves to the next Wagon in the sequences and increases the position by 1.
+            currentWagon = currentWagon.getNextWagon();
             currentPosition++;
-
-            if (currentPosition == position) break;
         }
 
-        // Returns the requested Wagon or null if the position isn't valid
-        return currentPosition == position ? lastWagon : null;
+        // Returns the requested Wagon or null if it hasn't been found (position isn't valid).
+        return currentPosition == position ? currentWagon : null;
     }
 
     /**
@@ -341,8 +340,11 @@ public class Train {
 
         Wagon wagonToReverse = getFirstWagon();
 
+        // Preparing for reversing
         wagonToReverse.detachFront();
         setFirstWagon(null);
+
+        // Lets the reverse method in Wagon handle the reversing.
         attachToRear(wagonToReverse.reverseSequence());
     }
 
