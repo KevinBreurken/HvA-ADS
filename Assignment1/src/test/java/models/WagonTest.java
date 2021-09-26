@@ -29,6 +29,12 @@ public class WagonTest {
     }
 
     @Test
+    public void T0_EXTRA_WagonToStringContainsCorrectId() {
+        PassengerWagon wagon = new PassengerWagon(1000, 29);
+        assertTrue(wagon.toString().contains(String.valueOf(1000)));
+    }
+
+    @Test
     public void T01_AWagonCannotBeInstantiated() {
         // Dig deep ;-)
         assertTrue((Wagon.class.getModifiers() & 0x00000400) != 0);
@@ -79,7 +85,9 @@ public class WagonTest {
         Throwable t;
 
         t = assertThrows(IllegalStateException.class,
-                () -> { passengerWagon1.attachTail(passengerWagon2);}
+                () -> {
+                    passengerWagon1.attachTail(passengerWagon2);
+                }
         );
         assertTrue(t.getMessage().contains(passengerWagon1.toString()),
                 "Exception message should include the names of connected wagons");
@@ -87,7 +95,9 @@ public class WagonTest {
                 "Exception message should include the names of connected wagons");
 
         t = assertThrows(IllegalStateException.class,
-                () -> { passengerWagon3.attachTail(passengerWagon2);}
+                () -> {
+                    passengerWagon3.attachTail(passengerWagon2);
+                }
         );
 
         System.out.println(t.getMessage());

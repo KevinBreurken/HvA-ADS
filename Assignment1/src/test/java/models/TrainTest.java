@@ -42,7 +42,6 @@ public class TrainTest {
         freightWagon1.attachTail(freightWagon2);
     }
 
-    // TODO extra test representation invariant
     @AfterEach
     private void representationInvariant() {
         assertTrue(!passengerWagon1.hasNextWagon() || passengerWagon1 == passengerWagon1.getNextWagon().getPreviousWagon());
@@ -65,6 +64,27 @@ public class TrainTest {
         passengerTrain.setFirstWagon(new PassengerWagon(1313, 1300));
         assertTrue(passengerTrain.isPassengerTrain());
         assertFalse(passengerTrain.isFreightTrain());
+    }
+
+    @Test
+    public void T0_EXTRA_TrainToStringContainsCorrectData() {
+        passengerTrain = new Train(new Locomotive(13, 13), "Here", "There");
+        PassengerWagon firstWagon = new PassengerWagon(1313, 1300);
+        PassengerWagon secondWagon = new PassengerWagon(113, 130);
+        passengerTrain.attachToRear(firstWagon);
+        passengerTrain.attachToRear(secondWagon);
+
+        assertTrue(passengerTrain.toString().contains(firstWagon.toString()) && passengerTrain.toString().contains(secondWagon.toString()),
+                "Train should print it's attached wagons.");
+
+        assertTrue(passengerTrain.toString().contains(String.valueOf(passengerTrain.getNumberOfWagons())),
+                "Train toString shows incorrect numberOfWagons.");
+
+        assertTrue(passengerTrain.toString().contains("Here"),
+                "Origin's name not found in toString of Train.");
+
+        assertTrue(passengerTrain.toString().contains("There"),
+                "Destination's name not found in toString of Train.");
     }
 
     @Test
