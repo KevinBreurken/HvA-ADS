@@ -15,30 +15,30 @@ public class TrainTest {
     private void setup() {
         Locomotive rembrandt = new Locomotive(24531, 7);
         passengerTrain = new Train(rembrandt, "Amsterdam", "Paris");
-        passengerTrain.attachToRear(new PassengerWagon(8001, 32));
-        passengerTrain.attachToRear(new PassengerWagon(8002, 32));
-        passengerTrain.attachToRear(new PassengerWagon(8003, 18));
-        passengerTrain.attachToRear(new PassengerWagon(8004, 44));
-        passengerTrain.attachToRear(new PassengerWagon(8005, 44));
-        passengerTrain.attachToRear(new PassengerWagon(8006, 44));
-        passengerTrain.attachToRear(new PassengerWagon(8007, 40));
+        passengerTrain.attachToRear(new PassengerWagon(8001,32));
+        passengerTrain.attachToRear(new PassengerWagon(8002,32));
+        passengerTrain.attachToRear(new PassengerWagon(8003,18));
+        passengerTrain.attachToRear(new PassengerWagon(8004,44));
+        passengerTrain.attachToRear(new PassengerWagon(8005,44));
+        passengerTrain.attachToRear(new PassengerWagon(8006,44));
+        passengerTrain.attachToRear(new PassengerWagon(8007,40));
 
         Locomotive vanGogh = new Locomotive(29123, 7);
         trainWithoutWagons = new Train(vanGogh, "Amsterdam", "London");
 
         Locomotive clusius = new Locomotive(63427, 50);
         freightTrain = new Train(clusius, "Amsterdam", "Berlin");
-        freightTrain.attachToRear(new FreightWagon(9001, 50000));
-        freightTrain.attachToRear(new FreightWagon(9002, 40000));
-        freightTrain.attachToRear(new FreightWagon(9003, 30000));
+        freightTrain.attachToRear(new FreightWagon(9001,50000));
+        freightTrain.attachToRear(new FreightWagon(9002,40000));
+        freightTrain.attachToRear(new FreightWagon(9003,30000));
 
-        passengerWagon1 = new PassengerWagon(8011, 50);
-        passengerWagon2 = new PassengerWagon(8012, 50);
-        passengerWagon3 = new PassengerWagon(8013, 50);
+        passengerWagon1 = new PassengerWagon(8011,50);
+        passengerWagon2 = new PassengerWagon(8012,50);
+        passengerWagon3 = new PassengerWagon(8013,50);
         passengerWagon1.attachTail(passengerWagon2);
         passengerWagon2.attachTail(passengerWagon3);
-        freightWagon1 = new FreightWagon(9011, 60000);
-        freightWagon2 = new FreightWagon(9012, 60000);
+        freightWagon1 = new FreightWagon(9011,60000);
+        freightWagon2 = new FreightWagon(9012,60000);
         freightWagon1.attachTail(freightWagon2);
     }
 
@@ -72,9 +72,11 @@ public class TrainTest {
         passengerTrain = new Train(new Locomotive(13, 13), "Here", "There");
         PassengerWagon firstWagon = new PassengerWagon(1313, 1300);
         PassengerWagon secondWagon = new PassengerWagon(113, 130);
+        passengerTrain.attachToRear(firstWagon);
+        passengerTrain.attachToRear(secondWagon);
 
         assertTrue(passengerTrain.toString().contains(firstWagon.toString()) && passengerTrain.toString().contains(secondWagon.toString()),
-                "Train should print it's attached wagon sequence.");
+                "Train should print it's attached wagons.");
 
         assertTrue(passengerTrain.toString().contains(String.valueOf(passengerTrain.getNumberOfWagons())),
                 "Train toString shows incorrect numberOfWagons.");
@@ -121,16 +123,16 @@ public class TrainTest {
 
     @Test
     public void T13_checkCumulativeWagonPropertiesOnTrain() {
-        assertEquals(254, passengerTrain.getTotalNumberOfSeats());
-        assertEquals(0, trainWithoutWagons.getTotalNumberOfSeats());
-        assertEquals(0, freightTrain.getTotalNumberOfSeats());
-        assertEquals(0, passengerTrain.getTotalMaxWeight());
-        assertEquals(0, trainWithoutWagons.getTotalMaxWeight());
-        assertEquals(120000, freightTrain.getTotalMaxWeight());
+        assertEquals( 254, passengerTrain.getTotalNumberOfSeats());
+        assertEquals( 0, trainWithoutWagons.getTotalNumberOfSeats());
+        assertEquals( 0, freightTrain.getTotalNumberOfSeats());
+        assertEquals( 0, passengerTrain.getTotalMaxWeight());
+        assertEquals( 0, trainWithoutWagons.getTotalMaxWeight());
+        assertEquals( 120000, freightTrain.getTotalMaxWeight());
 
         // check final wagon
-        assertEquals(40, ((PassengerWagon) passengerTrain.getLastWagonAttached()).getNumberOfSeats());
-        assertEquals(30000, ((FreightWagon) freightTrain.getLastWagonAttached()).getMaxWeight());
+        assertEquals( 40, ((PassengerWagon) passengerTrain.getLastWagonAttached()).getNumberOfSeats());
+        assertEquals( 30000, ((FreightWagon) freightTrain.getLastWagonAttached()).getMaxWeight());
 
         // check toString
         assertTrue(freightTrain.toString().indexOf(" from Amsterdam to Berlin") > 0);
@@ -152,9 +154,9 @@ public class TrainTest {
     @Test
     public void T15_findWagonOnTrainById() {
         // find by id
-        assertEquals(50000, ((FreightWagon) (freightTrain.findWagonById(9001))).getMaxWeight());
-        assertEquals(40000, ((FreightWagon) (freightTrain.findWagonById(9002))).getMaxWeight());
-        assertEquals(30000, ((FreightWagon) (freightTrain.findWagonById(9003))).getMaxWeight());
+        assertEquals(50000, ((FreightWagon)(freightTrain.findWagonById(9001))).getMaxWeight());
+        assertEquals(40000, ((FreightWagon)(freightTrain.findWagonById(9002))).getMaxWeight());
+        assertEquals(30000, ((FreightWagon)(freightTrain.findWagonById(9003))).getMaxWeight());
         assertNull(freightTrain.findWagonById(9000));
         assertNull(trainWithoutWagons.findWagonById(8000));
     }
@@ -237,7 +239,7 @@ public class TrainTest {
     @Test
     public void T17_ShouldMoveFirstWagonCorrectly() {
         Train train = new Train(new Locomotive(13, 13), "Here", "There");
-        passengerTrain = new Train(new Locomotive(13, 13), "There", "Here");
+        passengerTrain = new Train(new Locomotive(13, 13),  "There", "Here");
         Wagon firstWagon = new PassengerWagon(13, 1313);
         Wagon lastWagon = new PassengerWagon(14, 1414);
         train.attachToRear(firstWagon);
@@ -258,7 +260,7 @@ public class TrainTest {
     @Test
     public void T17_ShouldMoveLastWagonCorrectly() {
         Train train = new Train(new Locomotive(13, 13), "Here", "There");
-        passengerTrain = new Train(new Locomotive(13, 13), "There", "Here");
+        passengerTrain = new Train(new Locomotive(13, 13),  "There", "Here");
         Wagon firstWagon = new PassengerWagon(13, 1313);
         Wagon lastWagon = new PassengerWagon(14, 1414);
         train.attachToRear(firstWagon);
