@@ -4,8 +4,10 @@ import java.util.Objects;
 
 /**
  * Parent class for Freight- and PassengerWagons.
- * A Wagon can be attached to a sequence of other wagons and an Engine.
+ * A Wagon can be attached to a sequence of other wagons (or one) and a Locomotive.
  * Can be part of a train.
+ *
+ * @author HvA HBO-ICT, Irene Doodeman, Kevin Breurken
  */
 public abstract class Wagon {
     protected int id;
@@ -69,16 +71,16 @@ public abstract class Wagon {
      * excluding this wagon itself.
      */
     public int getTailLength() {
-        int currentAmount = 0;
-        //Iterate until we are at the end of the wagons.
-        Wagon lastwagon = this;
-        while (lastwagon.hasNextWagon()) {
-            lastwagon = lastwagon.getNextWagon();
-            //Count every time we take a step.
-            currentAmount++;
+        int amountOfWagons = 0;
+        Wagon currentWagon = this;
+
+        while (currentWagon.hasNextWagon()) {
+            //Iterate until the end of the tail of this Wagon has been reached.
+            currentWagon = currentWagon.getNextWagon();
+            amountOfWagons++;
         }
 
-        return currentAmount;
+        return amountOfWagons;
     }
 
     /**
@@ -107,14 +109,19 @@ public abstract class Wagon {
      * or <code>null</code> if it had no wagons attached to its tail.
      */
     public Wagon detachTail() {
+        // Detaches the tail if it exists.
         if (hasNextWagon()) {
+            // Gets the Wagon behind this one (and every Wagon attached to that one).
             Wagon tailWagon = getNextWagon();
+
+            // Removes the link between this Wagon and it's tail.
             setNextWagon(null);
-            tailWagon.detachFront(); //Call detach on the tailWagon to sustain representation invariants.
+            tailWagon.detachFront();
+
             return tailWagon;
         }
 
-        return null;
+        return null; // In the case that the method gets called but there is no Wagon behind this Wagon.
     }
 
     /**
@@ -125,15 +132,19 @@ public abstract class Wagon {
      * or <code>null</code> if it had no previousWagon.
      */
     public Wagon detachFront() {
-
+        // Detaches the front if it exists.
         if (hasPreviousWagon()) {
+            // Gets the Wagon in front of this one (and every Wagon attached to that one)
             Wagon frontWagon = getPreviousWagon();
+
+            // Removes the link between this Wagon and it's front.
             setPreviousWagon(null);
-            frontWagon.detachTail(); //Call detach on the frontWagon to sustain representation invariants.
+            frontWagon.detachTail();
+
             return frontWagon;
         }
 
-        return null;
+        return null; // In the case that the method gets called but there is no Wagon in front of this Wagon.
     }
 
     /**
@@ -145,24 +156,25 @@ public abstract class Wagon {
      * @param front the wagon to which this wagon must be attached to.
      */
     public void reAttachTo(Wagon front) {
-        //Check if the wagon already exists in the wagon chain we want to attach to.
-        Wagon lastwagon = this;
-        while (lastwagon.hasNextWagon()) {
-            if (lastwagon.toString().equals(front.toString()))
+        // Check if the wagon already exists in the wagon sequences it needs to be attached to.
+        Wagon lastWagon = this;
+        while (lastWagon.hasNextWagon()) {
+            // Checks if the Wagon is in front.
+            if (lastWagon.toString().equals(front.toString()))
                 System.err.println("Can't attach wagon to child wagon.");
-            lastwagon = lastwagon.getNextWagon();
+            // Continues through the sequences to check the next Wagon
+            lastWagon = lastWagon.getNextWagon();
         }
 
-        //Detaches any existing connections that will be rearranged
+        // Detaches any existing connections that will be rearranged.
         detachFront();
 
-        //Attaches this wagon to its new predecessor front (sustaining the invariant propositions).
+        // Attaches this wagon to its new predecessor front.
         front.setNextWagon(this);
         setPreviousWagon(front);
-
     }
 
-    /*
+    /**
      * Removes this wagon from the sequence that it is part of,
      * and reconnects its tail to the wagon in front of it, if it exists.
      */
@@ -170,11 +182,11 @@ public abstract class Wagon {
         Wagon wagonPrevious = getPreviousWagon();
         Wagon wagonNext = getNextWagon();
 
-        //removes the Wagon from the sequence
+        // Removes the Wagon from the sequence.
         detachFront();
         detachTail();
 
-        //attaches the previous and next from the removed object to each other if possible.
+        // Attaches the previous and next from the removed object to each other if possible.
         if (wagonPrevious != null && wagonNext != null)
             wagonNext.reAttachTo(wagonPrevious);
 
@@ -189,23 +201,26 @@ public abstract class Wagon {
      */
     public Wagon reverseSequence() {
         Wagon previousWagonOnStart = detachFront();
-        Wagon lastBeforeReverse = getLastWagonAttached(); // The last wagon will be the first wagon at the end.
+        Wagon lastBeforeReverse = getLastWagonAttached(); // Will be the first wagon at the end.
 
-        Wagon anchorWagon = this;
-        Wagon lastPutToFront = null; // Keep a record of the last wagon we put to the front
+        Wagon anchorWagon = this; // Current Wagon during the reverse process.
+        Wagon lastWagonPutToFront = null; // Keeps a record of the last wagon we put to the front.
 
         while (anchorWagon.hasNextWagon()) {
+            // Gets the Wagon to move
             Wagon wagonToPutToFront = anchorWagon.getNextWagon();
+            // Detaches it from the sequences
             wagonToPutToFront.removeFromSequence();
 
-            wagonToPutToFront.attachTail(Objects.requireNonNullElse(lastPutToFront, anchorWagon));
+            // Puts the detaches Wagon in front of the current anchor.
+            wagonToPutToFront.attachTail(Objects.requireNonNullElse(lastWagonPutToFront, anchorWagon));
 
-            lastPutToFront = wagonToPutToFront;
+            lastWagonPutToFront = wagonToPutToFront;
         }
 
         // Attach it back to the starts previous wagon if it exists.
-        if (previousWagonOnStart != null && lastPutToFront != null)
-            lastPutToFront.reAttachTo(previousWagonOnStart);
+        if (previousWagonOnStart != null && lastWagonPutToFront != null)
+            lastWagonPutToFront.reAttachTo(previousWagonOnStart);
 
         return lastBeforeReverse;
     }
