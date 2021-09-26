@@ -42,7 +42,6 @@ public class TrainTest {
         freightWagon1.attachTail(freightWagon2);
     }
 
-    // TODO extra test representation invariant
     @AfterEach
     private void representationInvariant() {
         assertTrue(!passengerWagon1.hasNextWagon() || passengerWagon1 == passengerWagon1.getNextWagon().getPreviousWagon());
