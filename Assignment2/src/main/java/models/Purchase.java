@@ -25,8 +25,8 @@ public class Purchase {
 
         // TODO convert the information in the textLine to a new Purchase instance
         //  use the products.indexOf to find the product that is associated with the barcode of the purchase
-        String[] splittedLine = textLine.split(",");
-
+        String[] splittedLine = textLine.split(", ");
+        System.out.println(splittedLine.length);
         if (splittedLine.length != 2) {
             System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
             return null;
@@ -67,7 +67,10 @@ public class Purchase {
 
     @Override
     public String toString() {
-        double salesAmount = getProduct().getPrice() * getCount();
+        double salesAmount = 0;
+
+        if (getProduct() != null)
+            salesAmount = getProduct().getPrice() * getCount();
 
         return String.format("%s/%d/%.2f", getProduct(), getCount(), salesAmount);
     }

@@ -17,6 +17,8 @@ public class PurchaseTracker {
     public PurchaseTracker() {
         // TODO initialize products and purchases with an empty ordered list which sorts items by barcode.
         //  Use your generic implementation class OrderedArrayList
+        products = new OrderedArrayList<>();
+        purchases = new OrderedArrayList<>();
     }
 
     /**
@@ -32,20 +34,15 @@ public class PurchaseTracker {
 
         Scanner scanner = createFileScanner(filePath);
 
-        // TODO read all source lines from the scanner,
-        //  convert each line to an item of type E and
-        //  and add each item to the list
         while (scanner.hasNext()) {
             // input another line with author information
             String line = scanner.nextLine();
-
             // TODO convert the line to an instance of E
-
-
+            E item = converter.apply(line);
             // TODO add the item to the list of items
-
+            items.add(item);
         }
-        //System.out.printf("Imported %d items from %s.\n", items.size() - originalNumItems, filePath);
+        System.out.printf("Imported %d items from %s.\n", items.size() - originalNumItems, filePath);
     }
 
     /**
@@ -109,8 +106,9 @@ public class PurchaseTracker {
             //  retrieve a list of all files and sub folders in this directory
             File[] filesInDirectory = Objects.requireNonNullElse(file.listFiles(), new File[0]);
 
-            // TODO merge all purchases of all files and sub folders from the filesInDirectory list, recursively.
-
+            for (File value : filesInDirectory) {
+                mergePurchasesFromFileRecursively(value.getPath());
+            }
 
         } else if (file.getName().matches(PURCHASE_FILE_PATTERN)) {
             // the file is a regular file that matches the target pattern for raw purchase files
