@@ -1,0 +1,63 @@
+8712100516382, Calvé Pindakaas 650g, 4.25
+8712100516381, Calvé Pindakaas met nootjes 650g, 4.25
+8718907136068, Pure Hagelslag XL 390g, 2.85
+8718907136067, Melk Hagelslag XL 390g, 2.85
+8718907136066, Mix Hagelslag XL 390g, 2.85
+77074515, De Ruyter vruchtenhagel 400g, 1.95
+77074514, De Ruyter pure hagelslag 400g, 2.95
+77074513, De Ruyter melk hagelslag 400g, 2.95
+8710400131472, Scharreleieren 10st, 1.35
+8710400131471, Scharreleieren 6st, 1.15
+8710400131470, Scharreleieren 4st, 0.85
+3344234532001, Halfvolle melk 1L, 0.76
+3344234532002, Volle melk 1L, 0.79
+3344234532003, Karnemelk 1L, 0.69
+3344234532004, Halfvolle melk 1.5L, 1.06
+5000112544631, Coca Cola regular 1L, 1.02
+5000112544632, Coca Cola Zero 1L, 1.05
+5000112544633, Coca Cola regular 1.5L, 1.29
+5000112544634, Coca Cola Zero 1.5L, 1.34
+5000112544635, Coca Cola regular 4x1.5L, 4.82
+5000112544636, Coca Cola Zero 4x1.5L, 4.92
+770835501, Beemster kaas stuk 1Kg, 7.92
+770835502, Gouda kaas stuk 1Kg, 4.92
+770835503, Edammer kaas stuk 1Kg, 5.92
+770835504, Milner kaas stuk 1Kg, 6.92
+770835505, Boeren kaas stuk 1Kg, 8.92
+770835601, Beemster kaas plakken 200g, 3.47
+770835602, Gouda kaas plakken 200g, 2.67
+770835603, Edammer kaas plakken 200g, 2.97
+770835604, Milner kaas plakken 200g, 3.32
+770835605, Boeren kaas plakken 200g, 3.69
+4211423453201, Dr Oetker Pizza Magherita, 2.09
+4211423453202, Dr Oetker Pizza Salami, 2.29
+4211423453203, Dr Oetker Pizza Hawaii, 2.55
+4211423453204, Dr Oetker Pizza Tonijn, 2.49
+4211423453205, Dr Oetker Pizza Mozzarella, 2.29
+4211423453206, Dr Oetker Pizza Funghi, 2.89
+4211423453207, Dr Oetker Pizza Quattro Formaggi, 2.59
+4211423453208, Dr Oetker Pizza Speciale, 3.29
+4266423453201, Steenoven Pizza Magherita, 2.09
+4266423453202, Steenoven Pizza Salami, 2.29
+4266423453203, Steenoven Pizza Hawaii, 2.55
+4266423453204, Steenoven Pizza Tonijn, 2.49
+4216642345305, Steenoven Pizza Mozzarella, 2.29
+4266423453206, Steenoven Pizza Funghi, 2.89
+4266423453207, Steenoven Pizza Quattro Formaggi, 2.59
+4266423453208, Steenoven Pizza Speciale, 3.29
+3214563456671, Robijn klein en krachtig wit, 8.11
+3214563456672, Robijn klein en krachtig kleur, 8.11
+3214563456673, Robijn klein en krachtig donker, 8.11
+3214555456671, OMO vloeibaar wit, 6.11
+3214555456672, OMO vloeibaar kleur, 6.11
+3214555456673, OMO vloeibaar donker, 6.11
+3211255456671, Ariel pods wit, 5.11
+3211255456672, Ariel pods kleur, 5.11
+3211255456673, Ariel pods donker, 5.11
+1211255453301, Doritos cool american, 1.81
+1211255453302, Doritos naturel, 1.81
+1211255453303, Doritos nacho cheese, 1.81
+1211255453304, Doritos sweet chili, 1.81
+1211255453305, Doritos flamin hot, 1.81
+
+
