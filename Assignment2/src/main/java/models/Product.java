@@ -23,16 +23,13 @@ public class Product {
      * or null if the textLine is corrupt or incomplete
      */
     public static Product fromLine(String textLine) {
-        Product newProduct = null;
-
         String[] splittedLine = textLine.split(",");
-        if(splittedLine.length != 3)
-            System.err.printf("textLine [%s] is corrupted or incomplete",textLine);
-        for (int i = 0; i < splittedLine.length; i++) {
-            System.out.println(splittedLine[i]);
-        }
 
-        return newProduct;
+        if (splittedLine.length != 3) {
+            System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
+            return null;
+        }
+        return new Product(Long.parseLong(splittedLine[0]), splittedLine[1], Double.parseDouble(splittedLine[2]));
     }
 
     public long getBarcode() {

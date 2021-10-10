@@ -1,6 +1,8 @@
 import models.Product;
 import models.Purchase;
 
+import java.util.ArrayList;
+
 public class SupermarketStatisticsMain {
 
     public static void main(String[] args) {
@@ -34,8 +36,13 @@ public class SupermarketStatisticsMain {
         System.out.printf("Printing purchase:\n%s \n\n", testPurchase);
 
         System.out.println("\tb. fromLine method");
-        testProduct = Product.fromLine("5000112544631, Coca Cola regular 1L, 1.02");
-        System.out.println(testProduct);
+        System.out.println("Create a product and Purchase with the fromLine methods");
+        testProduct = Product.fromLine("8712100516381, Coca Cola regular 1L, 1.02");
+        ArrayList<Product> productList = new ArrayList<>();
+        productList.add(testProduct);
+        testPurchase = Purchase.fromLine("8712100516381, 19",productList);
+        System.out.printf("Printing product:\n%s \n", testProduct);
+        System.out.printf("Printing purchase:\n%s \n\n", testPurchase);
     }
 
 }
