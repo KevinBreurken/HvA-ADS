@@ -32,6 +32,7 @@ public class Purchase {
         long barcode = Long.parseLong(splittedLine[0]);
         int count = Integer.parseInt(splittedLine[1]);
         int index = products.indexOf(new Product(barcode));
+        System.out.println(index);
 
         //TODO ask about implementation suggestion
         return new Purchase(products.get(index), count);
