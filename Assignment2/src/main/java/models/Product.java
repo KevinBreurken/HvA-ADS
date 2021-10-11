@@ -59,7 +59,7 @@ public class Product implements Comparable<Product> {
 
     @Override
     public String toString() {
-        return String.format("%d/%s/%.2f", getBarcode(), getTitle(),getPrice());
+        return String.format("%d/%s/%.2f", barcode, title, price);
     }
 
     @Override

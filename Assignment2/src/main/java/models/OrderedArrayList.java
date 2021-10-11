@@ -1,6 +1,8 @@
 package models;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.function.BinaryOperator;
 
@@ -84,12 +86,19 @@ public class OrderedArrayList<E>
      * @return the position index of the found item in the arrayList, or -1 if no item matches the search item.
      */
     public int indexOfByIterativeBinarySearch(E searchItem) {
+//        ArrayList<E> itemsToSearch = new ArrayList<>(this.subList(0, nSorted));
+
 
         // TODO implement an iterative binary search on the sorted section of the arrayList, 0 <= index < nSorted
         //   to find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
 
 
         // TODO if no match was found, attempt a linear search of searchItem in the section nSorted <= index < size()
+
+        //temp code
+        for (E item : this) {
+            if (this.ordening.compare(searchItem, item) == 0) return this.indexOf(item);
+        }
 
         return -1;
     }

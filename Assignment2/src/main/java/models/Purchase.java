@@ -21,21 +21,20 @@ public class Purchase {
      * or null if the textLine is corrupt or incomplete
      */
     public static Purchase fromLine(String textLine, List<Product> products) {
-        Purchase newPurchase = null;
-
-        // TODO convert the information in the textLine to a new Purchase instance
-        //  use the products.indexOf to find the product that is associated with the barcode of the purchase
         String[] splittedLine = textLine.split(", ");
-        System.out.println(splittedLine.length);
+
+        //Returns if the given String isn't valid.
         if (splittedLine.length != 2) {
             System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
             return null;
         }
 
-        //TODO: Add the found product with the indexof method.
-        newPurchase = new Purchase(null, Integer.parseInt(splittedLine[1]));
+        long barcode = Long.parseLong(splittedLine[0]);
+        int count = Integer.parseInt(splittedLine[1]);
+        int index = products.indexOf(new Product(barcode));
 
-        return newPurchase;
+        //TODO ask about implementation suggestion
+        return new Purchase(products.get(index), count);
     }
 
     /**
@@ -63,15 +62,17 @@ public class Purchase {
         return product;
     }
 
+    private double getSalesAmount() {
+        return product.getPrice() * count;
+    }
+
     // TODO add public and private methods as per your requirements
 
     @Override
     public String toString() {
-        double salesAmount = 0;
-
-        if (getProduct() != null)
-            salesAmount = getProduct().getPrice() * getCount();
-
-        return String.format("%s/%d/%.2f", getProduct(), getCount(), salesAmount);
+        if (product != null) {
+            double salesAmount = getSalesAmount();
+            return String.format("%s/%d/%.2f", product, count, salesAmount);
+        } else return "The product is corrupted or incomplete";
     }
 }
