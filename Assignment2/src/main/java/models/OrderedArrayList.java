@@ -1,9 +1,8 @@
 package models;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.BinaryOperator;
 
 public class OrderedArrayList<E>
@@ -86,18 +85,16 @@ public class OrderedArrayList<E>
      * @return the position index of the found item in the arrayList, or -1 if no item matches the search item.
      */
     public int indexOfByIterativeBinarySearch(E searchItem) {
-        if (nSorted <= 1) return -1;
-
         int low = 0, high = nSorted-1, mid, compareValue;
 
-        do {
+        while (low <= high) {
             //Calculates the index number that is in the middle of the range.
             mid = low + (high - low) / 2;
 
             //Compares the item in the middle to the given item.
             compareValue = this.ordening.compare(searchItem, get(mid));
 
-            //Sets the outer values of the range.
+            //Sets the lowest and highest values of the range to check next.
             if (compareValue == 0) {
                 return mid;
             } else if (compareValue > 0) {
@@ -105,16 +102,11 @@ public class OrderedArrayList<E>
             } else {
                 high = mid-1;
             }
-
-        } while (!(low == high) && !(mid == low));
-
-        //If no match has been found,
-        // a linear search will be done on the unsorted section in an attempt to find a match here.
-        for (E item : this.subList(nSorted, this.size()-1)) {
-            if (this.ordening.compare(searchItem, item) == 0) return this.indexOf(item);
         }
 
-        return -1; //Returns -1 in the case no match has been found in both parts of this List.
+        //If no match has been found, a linear search will be done on the unsorted section.
+        //-1 gets returned if no match has been found here either.
+        return linearSearch(searchItem, this.subList(nSorted, this.size()-1));
     }
 
     /**
@@ -133,6 +125,22 @@ public class OrderedArrayList<E>
 
         // TODO if no match was found, attempt a linear search of searchItem in the section nSorted <= index < size()
 
+
+        //If no match has been found, a linear search will be done on the unsorted section.
+        //-1 gets returned if no match has been found here either.
+        return linearSearch(searchItem, this.subList(nSorted, this.size()-1));
+    }
+
+    /**
+     * Searches for the item in the given sublist of this instance of this Class and returns it
+     * or returns -1 if the item isn't in this part of this list.
+     * @param searchItem
+     * @return
+     */
+    private int linearSearch(E searchItem, List<E> sublist) {
+        for (E item : sublist) {
+            if (this.ordening.compare(searchItem, item) == 0) return this.indexOf(item);
+        }
         return -1;
     }
 
