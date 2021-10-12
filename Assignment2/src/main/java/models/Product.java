@@ -29,6 +29,7 @@ public class Product implements Comparable<Product> {
             System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
             return null;
         }
+
         return new Product(Long.parseLong(splittedLine[0]), splittedLine[1], Double.parseDouble(splittedLine[2]));
     }
 

@@ -22,6 +22,9 @@ public class Purchase {
      */
     public static Purchase fromLine(String textLine, List<Product> products) {
         String[] splittedLine = textLine.split(", ");
+        //Putting the data in variables for the sake of readability.
+        long barcode = Long.parseLong(splittedLine[0]);
+        int count = Integer.parseInt(splittedLine[1]);
 
         //Returns if the given String isn't valid.
         if (splittedLine.length != 2) {
@@ -29,8 +32,6 @@ public class Purchase {
             return null;
         }
 
-        long barcode = Long.parseLong(splittedLine[0]);
-        int count = Integer.parseInt(splittedLine[1]);
         int index = products.indexOf(new Product(barcode));
         System.out.println(index);
 

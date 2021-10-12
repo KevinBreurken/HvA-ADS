@@ -88,13 +88,13 @@ public class OrderedArrayList<E>
     public int indexOfByIterativeBinarySearch(E searchItem) {
         if (nSorted <= 1) return -1;
 
-        //TODO call recursive method instead of using a loop
         int low = 0, high = nSorted-1, mid, compareValue;
 
         do {
             //Calculates the index number that is in the middle of the range.
-            mid = low + (high - low)/2;
+            mid = low + (high - low) / 2;
 
+            //Compares the item in the middle to the given item.
             compareValue = this.ordening.compare(searchItem, get(mid));
 
             //Sets the outer values of the range.
@@ -114,7 +114,7 @@ public class OrderedArrayList<E>
             if (this.ordening.compare(searchItem, item) == 0) return this.indexOf(item);
         }
 
-        return -1; //Returns -1 in the case no match has been found.
+        return -1; //Returns -1 in the case no match has been found in both parts of this List.
     }
 
     /**
@@ -128,7 +128,6 @@ public class OrderedArrayList<E>
      * @return the position index of the found item in the arrayList, or -1 if no item matches the search item.
      */
     public int indexOfByRecursiveBinarySearch(E searchItem) {
-
         // TODO implement a recursive binary search on the sorted section of the arrayList, 0 <= index < nSorted
         //   to find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
 
