@@ -16,6 +16,9 @@ public interface OrderedList<E> extends List<E> {
 
     default double aggregate(ToDoubleFunction<E> mapper) {
         double sum = 0;
+
+        for (E item : this) sum += mapper.applyAsDouble(item);
+
         return sum;
     }
 }

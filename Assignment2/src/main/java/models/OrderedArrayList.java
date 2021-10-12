@@ -47,7 +47,6 @@ public class OrderedArrayList<E>
     //  such that they sustain the representation invariant of OrderedArrayList
     //  (hint: only change nSorted as required to guarantee the representation invariant, do not invoke a sort)
 
-
     @Override
     public void sort() {
         if (this.nSorted < this.size()) {
@@ -122,9 +121,6 @@ public class OrderedArrayList<E>
     public int indexOfByRecursiveBinarySearch(E searchItem) {
         // TODO implement a recursive binary search on the sorted section of the arrayList, 0 <= index < nSorted
         //   to find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
-
-        // TODO if no match was found, attempt a linear search of searchItem in the section nSorted <= index < size()
-
 
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.

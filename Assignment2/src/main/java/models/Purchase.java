@@ -33,7 +33,6 @@ public class Purchase {
         }
 
         int index = products.indexOf(new Product(barcode));
-        System.out.println(index);
 
         //TODO ask about implementation suggestion
         return new Purchase(products.get(index), count);
