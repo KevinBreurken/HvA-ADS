@@ -43,6 +43,12 @@ public class OrderedArrayList<E>
         this.nSorted = this.size();
     }
 
+    @Override
+    public void add(int index, E element) {
+        super.add(index, element);
+        this.nSorted = this.size();
+    }
+
     // TODO override the ArrayList.add(index, item), ArrayList.remove(index) and Collection.remove(object) methods
     //  such that they sustain the representation invariant of OrderedArrayList
     //  (hint: only change nSorted as required to guarantee the representation invariant, do not invoke a sort)
@@ -90,18 +96,20 @@ public class OrderedArrayList<E>
             //Calculates the index number that is in the middle of the range.
             mid = low + (high - low) / 2;
 
+            System.out.println(String.format("L[%s] M[%s] H[%s]",low,mid,high));
             //Compares the item in the middle to the given item.
             compareValue = this.ordening.compare(searchItem, get(mid));
 
             //Sets the lowest and highest values of the range to check next.
             if (compareValue == 0) {
                 return mid;
-            } else if (compareValue > 0) {
+            } else if (compareValue < 0) {
                 low = mid+1;
             } else {
                 high = mid-1;
             }
         }
+
 
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
@@ -166,5 +174,17 @@ public class OrderedArrayList<E>
 
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Ordered ArrayList:\n");
+        for (E e : this) {
+            sb.append(e + "\n");
+        }
+        sb.append("\n");
+
+        return sb.toString();
     }
 }

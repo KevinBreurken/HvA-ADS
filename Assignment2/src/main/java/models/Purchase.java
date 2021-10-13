@@ -3,6 +3,8 @@ package models;
 import java.util.List;
 
 public class Purchase {
+
+    private static final String DELIMITER = ", ";
     private final Product product;
     private int count;
 
@@ -73,7 +75,7 @@ public class Purchase {
     public String toString() {
         if (product != null) {
             double salesAmount = getSalesAmount();
-            return String.format("%s/%d/%.2f", product, count, salesAmount);
+            return String.format("%d/%s/%d/%.2f", product.getBarcode(),product.getTitle(), count, salesAmount);
         } else return "The product is corrupted or incomplete";
     }
 }

@@ -1,6 +1,7 @@
 package models;
 
-public class Product implements Comparable<Product> {
+public class Product {
+    private static final String DELIMITER = ", ";
     private final long barcode;
     private String title;
     private double price;
@@ -23,7 +24,7 @@ public class Product implements Comparable<Product> {
      * or null if the textLine is corrupt or incomplete
      */
     public static Product fromLine(String textLine) {
-        String[] splittedLine = textLine.split(", ");
+        String[] splittedLine = textLine.split(DELIMITER);
 
         if (splittedLine.length < 3) {
             System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
@@ -63,8 +64,4 @@ public class Product implements Comparable<Product> {
         return String.format("%d/%s/%.2f", barcode, title, price);
     }
 
-    @Override
-    public int compareTo(Product o) {
-        return Long.compare(getBarcode(),o.getBarcode());
-    }
 }
