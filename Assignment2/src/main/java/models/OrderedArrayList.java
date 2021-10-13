@@ -46,7 +46,24 @@ public class OrderedArrayList<E>
     @Override
     public void add(int index, E element) {
         super.add(index, element);
-        this.nSorted = this.size();
+        if(index <= this.nSorted)
+            this.nSorted = index;
+    }
+
+    @Override
+    public E remove(int index) {
+        E element = get(index);
+        this.remove(element);
+
+        return element;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        if(indexOf(o) <= this.nSorted)
+            this.nSorted--;
+
+        return super.remove(o);
     }
 
     // TODO override the ArrayList.add(index, item), ArrayList.remove(index) and Collection.remove(object) methods
@@ -91,29 +108,29 @@ public class OrderedArrayList<E>
      */
     public int indexOfByIterativeBinarySearch(E searchItem) {
         int low = 0, high = nSorted-1, mid, compareValue;
-
-        while (low <= high) {
+        System.out.println(nSorted);
+        while (low <= high && high < nSorted) {
             //Calculates the index number that is in the middle of the range.
             mid = low + (high - low) / 2;
 
             System.out.println(String.format("L[%s] M[%s] H[%s]",low,mid,high));
             //Compares the item in the middle to the given item.
+//            System.out.println(this.ordening.compare(searchItem, get(high)));
             compareValue = this.ordening.compare(searchItem, get(mid));
 
             //Sets the lowest and highest values of the range to check next.
             if (compareValue == 0) {
                 return mid;
-            } else if (compareValue < 0) {
+            } else if (compareValue > 0) {
                 low = mid+1;
             } else {
                 high = mid-1;
             }
         }
 
-
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
-        return linearSearch(searchItem, this.subList(nSorted, this.size()-1));
+        return nSorted + linearSearch(searchItem, this.subList(nSorted, this.size() - 1));
     }
 
     /**
@@ -142,8 +159,8 @@ public class OrderedArrayList<E>
      * @return
      */
     private int linearSearch(E searchItem, List<E> sublist) {
-        for (E item : sublist) {
-            if (this.ordening.compare(searchItem, item) == 0) return this.indexOf(item);
+        for (int i = 0; i < sublist.size(); i++) {
+            if (this.ordening.compare(searchItem,sublist.get(i)) == 0) return i;
         }
         return -1;
     }
