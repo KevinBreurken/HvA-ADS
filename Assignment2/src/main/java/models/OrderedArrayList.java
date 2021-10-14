@@ -130,7 +130,7 @@ public class OrderedArrayList<E>
 
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
-        return nSorted + linearSearch(searchItem, this.subList(nSorted, this.size() - 1));
+        return nSorted + linearSearch(searchItem, this.subList(nSorted, this.size()));
     }
 
     /**
@@ -149,7 +149,7 @@ public class OrderedArrayList<E>
 
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
-        return linearSearch(searchItem, this.subList(nSorted, this.size()-1));
+        return nSorted + linearSearch(searchItem, this.subList(nSorted, this.size()));
     }
 
     /**
