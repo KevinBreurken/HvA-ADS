@@ -15,6 +15,7 @@ public class OrderedArrayList<E>
     //      all items at index positions 0 <= index < nSorted have been ordered by the given ordening comparator
     //      other items at index position nSorted <= index < size() can be in any order amongst themselves
     //              and also relative to the sorted section
+    int low, high; //Variables needed for the recursive binary search
 
     public OrderedArrayList() {
         this(null);
@@ -28,6 +29,11 @@ public class OrderedArrayList<E>
 
     public Comparator<? super E> getOrdening() {
         return this.ordening;
+    }
+
+    private void setBinarySearchVariablesToDefault() {
+        low = 0;
+        high = nSorted-1;
     }
 
     @Override
@@ -89,6 +95,7 @@ public class OrderedArrayList<E>
     @Override
     public int indexOfByBinarySearch(E searchItem) {
         if (searchItem != null) {
+            setBinarySearchVariablesToDefault();
             // some arbitrary choice to use the iterative or the recursive version
             return indexOfByRecursiveBinarySearch(searchItem);
         } else {
@@ -108,14 +115,17 @@ public class OrderedArrayList<E>
      */
     public int indexOfByIterativeBinarySearch(E searchItem) {
         int low = 0, high = nSorted-1, mid, compareValue;
-        System.out.println(nSorted);
+//        int mid, compareValue;
+
         while (low <= high && high < nSorted) {
             //Calculates the index number that is in the middle of the range.
             mid = low + (high - low) / 2;
 
-            System.out.println(String.format("L[%s] M[%s] H[%s]",low,mid,high));
-            //Compares the item in the middle to the given item.
+            //TODO remove test code
+//            System.out.printf("L[%s] M[%s] H[%s]%n",low,mid,high);
 //            System.out.println(this.ordening.compare(searchItem, get(high)));
+
+            //Compares the item in the middle to the given item.
             compareValue = this.ordening.compare(searchItem, get(mid));
 
             //Sets the lowest and highest values of the range to check next.
@@ -147,6 +157,25 @@ public class OrderedArrayList<E>
         // TODO implement a recursive binary search on the sorted section of the arrayList, 0 <= index < nSorted
         //   to find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
 
+        int mid = low + (high - low) / 2;
+
+        int compareValue = this.ordening.compare(searchItem, get(mid));
+
+        System.out.printf("L[%s] M[%s] H[%s]%n",low,mid,high);
+
+        if (low <= high && high < nSorted) {
+            if (compareValue == 0) {
+                return mid;
+            } else if (compareValue > 0) {
+                low = mid+1;
+                return indexOfByRecursiveBinarySearch(searchItem);
+            } else {
+                high = mid - 1;
+                return indexOfByRecursiveBinarySearch(searchItem);
+            }
+        }
+
+        System.out.println("AAAAAAA");
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
         return nSorted + linearSearch(searchItem, this.subList(nSorted, this.size()));
@@ -159,6 +188,7 @@ public class OrderedArrayList<E>
      * @return
      */
     private int linearSearch(E searchItem, List<E> sublist) {
+        System.out.println(sublist.toString());
         for (int i = 0; i < sublist.size(); i++) {
             if (this.ordening.compare(searchItem,sublist.get(i)) == 0) return i;
         }
@@ -180,6 +210,8 @@ public class OrderedArrayList<E>
     @Override
     public boolean merge(E newItem, BinaryOperator<E> merger) {
         if (newItem == null) return false;
+
+        setBinarySearchVariablesToDefault();
         int matchedItemIndex = this.indexOfByRecursiveBinarySearch(newItem);
 
         if (matchedItemIndex < 0) {
