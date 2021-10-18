@@ -35,9 +35,13 @@ public class Purchase {
         }
 
         int index = products.indexOf(new Product(barcode));
-
-        //TODO ask about implementation suggestion
+        if(index <= -1){
+            System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
+            return null;
+        }
         return new Purchase(products.get(index), count);
+//        System.out.println("INDEX OF PRODUCT: " + index);
+        //TODO ask about implementation suggestion
     }
 
     /**

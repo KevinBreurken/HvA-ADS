@@ -161,6 +161,7 @@ public class PurchaseTracker {
      * @param filePath
      */
     private void mergePurchasesFromFile(String filePath) {
+        System.out.println(products);
         int originalNumPurchases = purchases.size();
 
         // create a temporary ordered list for the additional purchases, ordered by same comparator as the main list
@@ -170,15 +171,27 @@ public class PurchaseTracker {
         this.purchases.sort();
 
         // TODO import all purchases from the specified file into the newPurchases list
-        importItemsFromFile(newPurchases, filePath, Purchase::fromLine);
-
+//        importItemsFromFile(newPurchases, filePath, s -> Purchase.fromLine(filePath,products));
+        importItemsFromFile(newPurchases, filePath, new Function<String, Purchase>() {
+            @Override
+            public Purchase apply(String s) {
+                return Purchase.fromLine(s,products);
+            }
+        });
+        importItemsFromFile(newPurchases, filePath, s -> null);
+        System.out.println("Finished first import");
+//        System.out.println("Purchase List: " + this.purchases)
+        System.out.println("Before merge: " + purchases.size());
         // TODO merge all purchases from the newPurchases list into this.purchases
+        // TODO Merge isnt merging corectly. Check binaryoperator validity
         for (Purchase purchase : newPurchases) {
-            this.purchases.merge(purchase,
-                    null
+            this.purchases.merge(purchase,(p1,p2) -> p1
             );
+//            products.merge(products.get(index), (p1,p2) -> { p1.setPrice(p1.getPrice() + p2.getPrice()); return p1;} );
         }
-
+        System.out.println("After merge: " + purchases.size());
+        System.out.println();
+        System.out.println();
         int addedCount = purchases.size() - originalNumPurchases;
         //System.out.printf("Merged %d, added %d new purchases from %s.\n", newPurchases.size() - addedCount, addedCount, filePath);
     }

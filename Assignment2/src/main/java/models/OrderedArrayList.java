@@ -110,6 +110,11 @@ public class OrderedArrayList<E>
      * @return the position index of the found item in the arrayList, or -1 if no item matches the search item.
      */
     public int indexOfByIterativeBinarySearch(E searchItem) {
+
+        //Stop if we don't have any elements
+        if(high < 1)
+            return -1;
+
         int low = 0, high = nSorted-1, mid, compareValue;
 //        int mid, compareValue;
 
@@ -133,7 +138,7 @@ public class OrderedArrayList<E>
                 high = mid-1;
             }
         }
-
+        System.out.println("CALLING LINEAR SEARCH");
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
         return linearSearch(searchItem, this.subList(nSorted, this.size()));
@@ -153,11 +158,15 @@ public class OrderedArrayList<E>
         // Search on the sorted section of the arrayList, 0 <= index < nSorted
         // and find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
 
+        //Stop if we don't have any elements
+        if(high < 1)
+            return -1;
+
         int mid = low + (high - low) / 2;
 
         int compareValue = this.ordening.compare(searchItem, get(mid));
 
-//        System.out.printf("L[%s] M[%s] H[%s]%n",low,mid,high);
+        System.out.printf("L[%s] M[%s] H[%s]%n",low,mid,high);
 
         if (low <= high && high < nSorted) {
             if (compareValue == 0) {
@@ -207,7 +216,7 @@ public class OrderedArrayList<E>
 
         setBinarySearchVariablesToDefault();
         int matchedItemIndex = this.indexOfByRecursiveBinarySearch(newItem);
-
+        System.out.println("Matched Index: " + matchedItemIndex);
         if (matchedItemIndex < 0)
             this.add(newItem);
         else
