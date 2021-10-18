@@ -71,11 +71,7 @@ public class OrderedArrayList<E>
 
         return super.remove(o);
     }
-
-    // TODO override the ArrayList.add(index, item), ArrayList.remove(index) and Collection.remove(object) methods
-    //  such that they sustain the representation invariant of OrderedArrayList
-    //  (hint: only change nSorted as required to guarantee the representation invariant, do not invoke a sort)
-
+    
     @Override
     public void sort() {
         if (this.nSorted < this.size()) {
@@ -140,7 +136,7 @@ public class OrderedArrayList<E>
 
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
-        return nSorted + linearSearch(searchItem, this.subList(nSorted, this.size()));
+        return linearSearch(searchItem, this.subList(nSorted, this.size()));
     }
 
     /**
@@ -154,14 +150,14 @@ public class OrderedArrayList<E>
      * @return the position index of the found item in the arrayList, or -1 if no item matches the search item.
      */
     public int indexOfByRecursiveBinarySearch(E searchItem) {
-        // TODO implement a recursive binary search on the sorted section of the arrayList, 0 <= index < nSorted
-        //   to find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
+        // Search on the sorted section of the arrayList, 0 <= index < nSorted
+        // and find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
 
         int mid = low + (high - low) / 2;
 
         int compareValue = this.ordening.compare(searchItem, get(mid));
 
-        System.out.printf("L[%s] M[%s] H[%s]%n",low,mid,high);
+//        System.out.printf("L[%s] M[%s] H[%s]%n",low,mid,high);
 
         if (low <= high && high < nSorted) {
             if (compareValue == 0) {
@@ -175,10 +171,9 @@ public class OrderedArrayList<E>
             }
         }
 
-        System.out.println("AAAAAAA");
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
-        return nSorted + linearSearch(searchItem, this.subList(nSorted, this.size()));
+        return linearSearch(searchItem, this.subList(nSorted, this.size()));
     }
 
     /**
@@ -188,9 +183,8 @@ public class OrderedArrayList<E>
      * @return
      */
     private int linearSearch(E searchItem, List<E> sublist) {
-        System.out.println(sublist.toString());
         for (int i = 0; i < sublist.size(); i++) {
-            if (this.ordening.compare(searchItem,sublist.get(i)) == 0) return i;
+            if (this.ordening.compare(searchItem,sublist.get(i)) == 0) return i + nSorted;
         }
         return -1;
     }
@@ -214,15 +208,12 @@ public class OrderedArrayList<E>
         setBinarySearchVariablesToDefault();
         int matchedItemIndex = this.indexOfByRecursiveBinarySearch(newItem);
 
-        if (matchedItemIndex < 0) {
+        if (matchedItemIndex < 0)
             this.add(newItem);
-            return true;
-        } else {
-            // TODO retrieve the matched item and
-            //  replace the matched item in the list with the merger of the matched item and the newItem
+        else
+            this.set(matchedItemIndex,merger.apply(get(matchedItemIndex),newItem));
 
-            return false;
-        }
+        return true;
     }
 
     @Override
