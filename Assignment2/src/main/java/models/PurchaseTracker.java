@@ -15,10 +15,8 @@ public class PurchaseTracker {
     private OrderedList<Purchase> purchases;      // the aggregated volumes of all purchases of all products across all branches
 
     public PurchaseTracker() {
-        // TODO initialize products and purchases with an empty ordered list which sorts items by barcode.
-        //  Use your generic implementation class OrderedArrayList
-        products = new OrderedArrayList<>();
-        purchases = new OrderedArrayList<>();
+        products = new OrderedArrayList<>(Comparator.comparing(Product::getBarcode));
+        purchases = new OrderedArrayList<>(Comparator.comparing(Purchase::getBarcode));
     }
 
     /**
@@ -34,6 +32,7 @@ public class PurchaseTracker {
 
         Scanner scanner = createFileScanner(filePath);
 
+        System.out.println(converter);
         while (scanner.hasNext()) {
             // input another line with author information
             String line = scanner.nextLine();
@@ -99,6 +98,7 @@ public class PurchaseTracker {
      */
     private void mergePurchasesFromFileRecursively(String filePath) {
 
+        System.out.println("Read from path: " + filePath);
         File file = new File(filePath);
 
         if (file.isDirectory()) {
@@ -113,8 +113,10 @@ public class PurchaseTracker {
         } else if (file.getName().matches(PURCHASE_FILE_PATTERN)) {
             // the file is a regular file that matches the target pattern for raw purchase files
             // merge the content of this file into this.purchases
+            System.out.println("Found file. Merge-");
             this.mergePurchasesFromFile(file.getAbsolutePath());
         }
+
     }
 
     /**
@@ -168,9 +170,7 @@ public class PurchaseTracker {
         this.purchases.sort();
 
         // TODO import all purchases from the specified file into the newPurchases list
-        importItemsFromFile(newPurchases, filePath,
-                null
-        );
+        importItemsFromFile(newPurchases, filePath, Purchase::fromLine);
 
         // TODO merge all purchases from the newPurchases list into this.purchases
         for (Purchase purchase : newPurchases) {

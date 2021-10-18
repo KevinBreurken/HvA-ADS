@@ -14,8 +14,10 @@ public class PurchaseTrackerTest {
         purchaseTracker = new PurchaseTracker();
 
         purchaseTracker.importProductsFromVault("/products.txt");
-
+        System.out.println("Start import purchase");
         purchaseTracker.importPurchasesFromVault("/purchases");
+        System.out.println("End import purchase");
+
     }
 
     @Test
