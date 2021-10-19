@@ -35,13 +35,11 @@ public class Purchase {
         }
 
         int index = products.indexOf(new Product(barcode));
-        if(index <= -1){
+        if (index <= -1) {
             System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
             return null;
         }
         return new Purchase(products.get(index), count);
-//        System.out.println("INDEX OF PRODUCT: " + index);
-        //TODO ask about implementation suggestion
     }
 
     /**
@@ -54,6 +52,7 @@ public class Purchase {
     }
 
     public long getBarcode() {
+
         return this.product.getBarcode();
     }
 
@@ -79,7 +78,7 @@ public class Purchase {
     public String toString() {
         if (product != null) {
             double salesAmount = getSalesAmount();
-            return String.format("%d/%s/%d/%.2f", product.getBarcode(),product.getTitle(), count, salesAmount);
+            return String.format("%d/%s/%d/%.2f", product.getBarcode(), product.getTitle(), count, salesAmount);
         } else return "The product is corrupted or incomplete";
     }
 }

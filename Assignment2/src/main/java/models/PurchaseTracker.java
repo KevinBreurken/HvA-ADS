@@ -32,7 +32,6 @@ public class PurchaseTracker {
 
         Scanner scanner = createFileScanner(filePath);
 
-        System.out.println(converter);
         while (scanner.hasNext()) {
             // input another line with author information
             String line = scanner.nextLine();
@@ -98,7 +97,6 @@ public class PurchaseTracker {
      */
     private void mergePurchasesFromFileRecursively(String filePath) {
 
-        System.out.println("Read from path: " + filePath);
         File file = new File(filePath);
 
         if (file.isDirectory()) {
@@ -113,7 +111,6 @@ public class PurchaseTracker {
         } else if (file.getName().matches(PURCHASE_FILE_PATTERN)) {
             // the file is a regular file that matches the target pattern for raw purchase files
             // merge the content of this file into this.purchases
-            System.out.println("Found file. Merge-");
             this.mergePurchasesFromFile(file.getAbsolutePath());
         }
 
@@ -161,8 +158,7 @@ public class PurchaseTracker {
      * @param filePath
      */
     private void mergePurchasesFromFile(String filePath) {
-        System.out.println(products);
-        int originalNumPurchases = purchases.size();
+//        int originalNumPurchases = purchases.size();
 
         // create a temporary ordered list for the additional purchases, ordered by same comparator as the main list
         OrderedList<Purchase> newPurchases = new OrderedArrayList<>(this.purchases.getOrdening());
@@ -170,30 +166,14 @@ public class PurchaseTracker {
         // re-sort the accumulated purchases for efficient searching
         this.purchases.sort();
 
-        // TODO import all purchases from the specified file into the newPurchases list
-//        importItemsFromFile(newPurchases, filePath, s -> Purchase.fromLine(filePath,products));
-        importItemsFromFile(newPurchases, filePath, new Function<String, Purchase>() {
-            @Override
-            public Purchase apply(String s) {
-                return Purchase.fromLine(s,products);
-            }
-        });
-        importItemsFromFile(newPurchases, filePath, s -> null);
-        System.out.println("Finished first import");
-//        System.out.println("Purchase List: " + this.purchases)
-        System.out.println("Before merge: " + purchases.size());
-        // TODO merge all purchases from the newPurchases list into this.purchases
-        // TODO Merge isnt merging corectly. Check binaryoperator validity
-        for (Purchase purchase : newPurchases) {
-            this.purchases.merge(purchase,(p1,p2) -> p1
-            );
-//            products.merge(products.get(index), (p1,p2) -> { p1.setPrice(p1.getPrice() + p2.getPrice()); return p1;} );
-        }
-        System.out.println("After merge: " + purchases.size());
-        System.out.println();
-        System.out.println();
-        int addedCount = purchases.size() - originalNumPurchases;
-        //System.out.printf("Merged %d, added %d new purchases from %s.\n", newPurchases.size() - addedCount, addedCount, filePath);
+        importItemsFromFile(newPurchases, filePath, s -> Purchase.fromLine(s,products));
+
+        for (Purchase purchase : newPurchases)
+            this.purchases.merge(purchase,(p1,p2) -> { p1.setCount(p1.getCount() + p2.getCount()); return p1;});
+
+
+//        int addedCount = purchases.size() - originalNumPurchases;
+//        System.out.printf("Merged %d, added %d new purchases from %s.\n", newPurchases.size() - addedCount, addedCount, filePath);
     }
 
     public List<Product> getProducts() {

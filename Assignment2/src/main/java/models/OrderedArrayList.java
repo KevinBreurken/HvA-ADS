@@ -33,7 +33,7 @@ public class OrderedArrayList<E>
 
     private void setBinarySearchVariablesToDefault() {
         low = 0;
-        high = nSorted-1;
+        high = nSorted - 1;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class OrderedArrayList<E>
     @Override
     public void add(int index, E element) {
         super.add(index, element);
-        if(index <= this.nSorted)
+        if (index <= this.nSorted)
             this.nSorted = index;
     }
 
@@ -66,12 +66,12 @@ public class OrderedArrayList<E>
 
     @Override
     public boolean remove(Object o) {
-        if(indexOf(o) <= this.nSorted)
+        if (indexOf(o) <= this.nSorted)
             this.nSorted--;
 
         return super.remove(o);
     }
-    
+
     @Override
     public void sort() {
         if (this.nSorted < this.size()) {
@@ -111,20 +111,15 @@ public class OrderedArrayList<E>
      */
     public int indexOfByIterativeBinarySearch(E searchItem) {
 
+        int low = 0, high = nSorted - 1, mid, compareValue;
         //Stop if we don't have any elements
-        if(high < 1)
-            return -1;
-
-        int low = 0, high = nSorted-1, mid, compareValue;
+//        if(high < 1)
+//            return -1;
 //        int mid, compareValue;
 
         while (low <= high && high < nSorted) {
             //Calculates the index number that is in the middle of the range.
             mid = low + (high - low) / 2;
-
-            //TODO remove test code
-//            System.out.printf("L[%s] M[%s] H[%s]%n",low,mid,high);
-//            System.out.println(this.ordening.compare(searchItem, get(high)));
 
             //Compares the item in the middle to the given item.
             compareValue = this.ordening.compare(searchItem, get(mid));
@@ -133,12 +128,11 @@ public class OrderedArrayList<E>
             if (compareValue == 0) {
                 return mid;
             } else if (compareValue > 0) {
-                low = mid+1;
+                low = mid + 1;
             } else {
-                high = mid-1;
+                high = mid - 1;
             }
         }
-        System.out.println("CALLING LINEAR SEARCH");
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
         return linearSearch(searchItem, this.subList(nSorted, this.size()));
@@ -159,20 +153,19 @@ public class OrderedArrayList<E>
         // and find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
 
         //Stop if we don't have any elements
-        if(high < 1)
-            return -1;
+        if (size() < 1) return -1;
 
         int mid = low + (high - low) / 2;
 
         int compareValue = this.ordening.compare(searchItem, get(mid));
 
-        System.out.printf("L[%s] M[%s] H[%s]%n",low,mid,high);
+//        System.out.printf("L[%s] M[%s] H[%s]%n", low, mid, high);
 
         if (low <= high && high < nSorted) {
             if (compareValue == 0) {
                 return mid;
             } else if (compareValue > 0) {
-                low = mid+1;
+                low = mid + 1;
                 return indexOfByRecursiveBinarySearch(searchItem);
             } else {
                 high = mid - 1;
@@ -188,12 +181,13 @@ public class OrderedArrayList<E>
     /**
      * Searches for the item in the given sublist of this instance of this Class and returns it
      * or returns -1 if the item isn't in this part of this list.
+     *
      * @param searchItem
      * @return
      */
     private int linearSearch(E searchItem, List<E> sublist) {
         for (int i = 0; i < sublist.size(); i++) {
-            if (this.ordening.compare(searchItem,sublist.get(i)) == 0) return i + nSorted;
+            if (this.ordening.compare(searchItem, sublist.get(i)) == 0) return i + nSorted;
         }
         return -1;
     }
@@ -216,12 +210,12 @@ public class OrderedArrayList<E>
 
         setBinarySearchVariablesToDefault();
         int matchedItemIndex = this.indexOfByRecursiveBinarySearch(newItem);
-        System.out.println("Matched Index: " + matchedItemIndex);
+
         if (matchedItemIndex < 0)
             this.add(newItem);
-        else
-            this.set(matchedItemIndex,merger.apply(get(matchedItemIndex),newItem));
-
+        else {
+            this.set(matchedItemIndex, merger.apply(newItem, get(matchedItemIndex)));
+        }
         return true;
     }
 
