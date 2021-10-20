@@ -9,7 +9,7 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
 
     protected Comparator<? super E> ordening;   // the comparator that has been used with the latest sort
     protected int nSorted;                      // the number of items that have been ordered by barcode in the list
-    private int low, high;                              // Variables needed for the recursive binary search
+    private int low, high;                    // Variables needed for the recursive binary search
 
     public OrderedArrayList() {
         this(null);
@@ -116,20 +116,18 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
         int mid, compareValue;
 
         while (low <= high && high < nSorted) {
-            //Calculates the index number that is in the middle of the range.
+            //Calculates the index number that is in the middle of the range that needs to be checked.
             mid = low + (high - low) / 2;
 
-            //Compares the item in the middle to the given item.
+            //Compares the given item to the item in the middle of the range (between low and high).
             compareValue = this.ordening.compare(searchItem, get(mid));
 
+            //Returns if the item has been found.
+            if (compareValue == 0) return mid;
             //Sets the lowest and highest values of the range to check next.
-            if (compareValue == 0) {
-                return mid;
-            } else if (compareValue > 0) {
-                low = mid + 1;
-            } else {
-                high = mid - 1;
-            }
+            else if (compareValue > 0) low = mid + 1;
+            else high = mid - 1;
+
         }
         //If no match has been found, a linear search will be done on the unsorted section.
         //-1 gets returned if no match has been found here either.
@@ -204,14 +202,14 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
     public boolean merge(E newItem, BinaryOperator<E> merger) {
         if (newItem == null) return false;
 
-        setBinarySearchVariablesToDefault();
+        setBinarySearchVariablesToDefault(); //Helper-function for the binary search methods.
+        //Searches if the new item exists in this List.
         int matchedItemIndex = this.indexOfByRecursiveBinarySearch(newItem);
 
-        if (matchedItemIndex < 0)
-            this.add(newItem);
-        else {
-            this.set(matchedItemIndex, merger.apply(newItem, get(matchedItemIndex)));
-        }
+        //Merging of the item:
+        if (matchedItemIndex < 0) this.add(newItem); //If the item isn't already in the list
+        else this.set(matchedItemIndex, merger.apply(newItem, get(matchedItemIndex)));
+
         return true;
     }
 
