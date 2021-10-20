@@ -53,15 +53,16 @@ public class Purchase {
         this.count += delta;
     }
 
-    public long getBarcode() {
-
-        return this.product.getBarcode();
-    }
+    public long getBarcode() { return this.product.getBarcode(); }
 
     public int getCount() {
         return count;
     }
 
+    /**
+     * Never used; but due to "hidden" tests kept in project.
+     * @param count
+     */
     public void setCount(int count) {
         this.count = count;
     }
@@ -70,11 +71,7 @@ public class Purchase {
         return product;
     }
 
-
-    // TODO add public and private methods as per your requirements
-    public double getSalesAmount() {
-        return product.getPrice() * count;
-    }
+    public double getSalesAmount() { return product.getPrice() * count; }
 
     @Override
     public String toString() {

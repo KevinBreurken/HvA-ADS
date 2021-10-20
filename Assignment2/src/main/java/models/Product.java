@@ -57,8 +57,6 @@ public class Product {
         return this.getBarcode() == ((Product) other).getBarcode();
     }
 
-    // TODO add public and private methods as per your requirements
-
     @Override
     public String toString() {
         return String.format("%d/%s/%.2f", barcode, title, price);

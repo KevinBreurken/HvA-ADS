@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 
 public class PurchaseTracker {
     private final String PURCHASE_FILE_PATTERN = ".*\\.txt";
@@ -29,17 +28,15 @@ public class PurchaseTracker {
      * @param <E>       the (generic) type of each item
      */
     public static <E> void importItemsFromFile(List<E> items, String filePath, Function<String, E> converter) {
-        int originalNumItems = items.size();
-
         Scanner scanner = createFileScanner(filePath);
 
+        //For every line in text file...
         while (scanner.hasNext()) {
-            // input another line with author information
             String line = scanner.nextLine();
+            //Convert line to new object of type E.
             E item = converter.apply(line);
             items.add(item);
         }
-//        System.out.printf("Imported %d items from %s.\n", items.size() - originalNumItems, filePath);
     }
 
     /**
@@ -162,8 +159,9 @@ public class PurchaseTracker {
 
         importItemsFromFile(newPurchases, filePath, s -> Purchase.fromLine(s,products));
 
+        // merge each new purchase into the purchases list.
         for (Purchase purchase : newPurchases)
-            this.purchases.merge(purchase,(p1,p2) -> { p1.setCount(p1.getCount() + p2.getCount()); return p1;});
+            this.purchases.merge(purchase,(p1,p2) -> { p1.addCount(p2.getCount()); return p1;});
 
     }
 

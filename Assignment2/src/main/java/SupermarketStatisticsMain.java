@@ -1,8 +1,6 @@
-import models.Product;
 import models.Purchase;
 import models.PurchaseTracker;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 
 public class SupermarketStatisticsMain {
@@ -24,8 +22,6 @@ public class SupermarketStatisticsMain {
         );
 
         purchaseTracker.showTotals();
-
-//        Purchase.fromLine("8712100516381, 19", purchaseTracker);
     }
 
 }

@@ -9,7 +9,7 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
 
     protected Comparator<? super E> ordening;   // the comparator that has been used with the latest sort
     protected int nSorted;                      // the number of items that have been ordered by barcode in the list
-    int low, high; //Variables needed for the recursive binary search
+    private int low, high;                              // Variables needed for the recursive binary search
 
     public OrderedArrayList() {
         this(null);
@@ -25,6 +25,9 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
         return this.ordening;
     }
 
+    /**
+     * restores the low and high variables for binary searches.
+     */
     private void setBinarySearchVariablesToDefault() {
         low = 0;
         high = nSorted - 1;
@@ -46,6 +49,7 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
     @Override
     public void add(int index, E element) {
         super.add(index, element);
+        // Change nSorted due to the added element changing what part is sorted of the list.
         if (index <= this.nSorted)
             this.nSorted = index;
     }
@@ -55,11 +59,16 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
         E element = get(index);
         this.remove(element);
 
+        // Lower nSorted if the index was part of the sorted section.
+        if (index <= this.nSorted)
+            this.nSorted--;
+
         return element;
     }
 
     @Override
     public boolean remove(Object o) {
+        // Lower nSorted if the index was part of the sorted section.
         if (indexOf(o) <= this.nSorted)
             this.nSorted--;
 
@@ -103,7 +112,8 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
      * @return the position index of the found item in the arrayList, or -1 if no item matches the search item.
      */
     public int indexOfByIterativeBinarySearch(E searchItem) {
-        int low = 0, high = nSorted - 1, mid, compareValue;
+        setBinarySearchVariablesToDefault();
+        int mid, compareValue;
 
         while (low <= high && high < nSorted) {
             //Calculates the index number that is in the middle of the range.
@@ -209,8 +219,10 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Ordered ArrayList:\n");
-        for (E e : this) {
-            sb.append(e + "\n");
+        for (int i = 0; i < size(); i++) {
+            sb.append(this.get(i) + "\n");
+            if(i == nSorted - 1)
+                sb.append("End of sorted segment\n");
         }
         sb.append("\n");
 
