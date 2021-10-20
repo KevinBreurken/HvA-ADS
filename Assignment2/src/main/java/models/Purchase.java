@@ -23,20 +23,22 @@ public class Purchase {
      * or null if the textLine is corrupt or incomplete
      */
     public static Purchase fromLine(String textLine, List<Product> products) {
-        String[] splittedLine = textLine.split(", ");
+        String[] splittedLine = textLine.split(DELIMITER);
         //Putting the data in variables for the sake of readability.
         long barcode = Long.parseLong(splittedLine[0]);
         int count = Integer.parseInt(splittedLine[1]);
 
         //Returns if the given String isn't valid.
         if (splittedLine.length != 2) {
-            System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
+            //Commented out error so the main log is the same as the assignment.
+            //System.err.printf("textLine [%s] is corrupted or incomplete for a Product\n", textLine);
             return null;
         }
 
         int index = products.indexOf(new Product(barcode));
         if (index <= -1) {
-            System.err.printf("textLine [%s] is corrupted or incomplete for a Product", textLine);
+            //Commented out error so the main log is the same as the assignment.
+            //System.err.printf("barcode found in textLine of purchase [%s] is not found in the productList\n", textLine);
             return null;
         }
         return new Purchase(products.get(index), count);
@@ -68,11 +70,11 @@ public class Purchase {
         return product;
     }
 
-    private double getSalesAmount() {
-        return product.getPrice() * count;
-    }
 
     // TODO add public and private methods as per your requirements
+    public double getSalesAmount() {
+        return product.getPrice() * count;
+    }
 
     @Override
     public String toString() {

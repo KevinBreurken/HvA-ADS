@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public class PurchaseTracker {
     private final String PURCHASE_FILE_PATTERN = ".*\\.txt";
@@ -35,12 +36,10 @@ public class PurchaseTracker {
         while (scanner.hasNext()) {
             // input another line with author information
             String line = scanner.nextLine();
-            // TODO convert the line to an instance of E
             E item = converter.apply(line);
-            // TODO add the item to the list of items
             items.add(item);
         }
-        System.out.printf("Imported %d items from %s.\n", items.size() - originalNumItems, filePath);
+//        System.out.printf("Imported %d items from %s.\n", items.size() - originalNumItems, filePath);
     }
 
     /**
@@ -104,9 +103,8 @@ public class PurchaseTracker {
             //  retrieve a list of all files and sub folders in this directory
             File[] filesInDirectory = Objects.requireNonNullElse(file.listFiles(), new File[0]);
 
-            for (File value : filesInDirectory) {
+            for (File value : filesInDirectory)
                 mergePurchasesFromFileRecursively(value.getPath());
-            }
 
         } else if (file.getName().matches(PURCHASE_FILE_PATTERN)) {
             // the file is a regular file that matches the target pattern for raw purchase files
@@ -142,13 +140,11 @@ public class PurchaseTracker {
      * shows total volume and total revenue sales statistics
      */
     public void showTotals() {
-        // TODO provide the mappers to calculate the specified aggregated quantities
         System.out.printf("Total volume of all purchases: %.0f\n",
+                purchases.aggregate(Purchase::getCount));
 
-                null);
         System.out.printf("Total revenue from all purchases: %.2f\n",
-
-                null);
+                purchases.aggregate(Purchase::getSalesAmount));
     }
 
     /**
@@ -158,8 +154,6 @@ public class PurchaseTracker {
      * @param filePath
      */
     private void mergePurchasesFromFile(String filePath) {
-//        int originalNumPurchases = purchases.size();
-
         // create a temporary ordered list for the additional purchases, ordered by same comparator as the main list
         OrderedList<Purchase> newPurchases = new OrderedArrayList<>(this.purchases.getOrdening());
 
@@ -171,9 +165,6 @@ public class PurchaseTracker {
         for (Purchase purchase : newPurchases)
             this.purchases.merge(purchase,(p1,p2) -> { p1.setCount(p1.getCount() + p2.getCount()); return p1;});
 
-
-//        int addedCount = purchases.size() - originalNumPurchases;
-//        System.out.printf("Merged %d, added %d new purchases from %s.\n", newPurchases.size() - addedCount, addedCount, filePath);
     }
 
     public List<Product> getProducts() {

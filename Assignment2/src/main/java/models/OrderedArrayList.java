@@ -5,16 +5,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.BinaryOperator;
 
-public class OrderedArrayList<E>
-        extends ArrayList<E>
-        implements OrderedList<E> {
+public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> {
 
     protected Comparator<? super E> ordening;   // the comparator that has been used with the latest sort
     protected int nSorted;                      // the number of items that have been ordered by barcode in the list
-    // representation-invariant
-    //      all items at index positions 0 <= index < nSorted have been ordered by the given ordening comparator
-    //      other items at index position nSorted <= index < size() can be in any order amongst themselves
-    //              and also relative to the sorted section
     int low, high; //Variables needed for the recursive binary search
 
     public OrderedArrayList() {
@@ -92,7 +86,6 @@ public class OrderedArrayList<E>
     public int indexOfByBinarySearch(E searchItem) {
         if (searchItem != null) {
             setBinarySearchVariablesToDefault();
-            // some arbitrary choice to use the iterative or the recursive version
             return indexOfByRecursiveBinarySearch(searchItem);
         } else {
             return -1;
@@ -110,12 +103,7 @@ public class OrderedArrayList<E>
      * @return the position index of the found item in the arrayList, or -1 if no item matches the search item.
      */
     public int indexOfByIterativeBinarySearch(E searchItem) {
-
         int low = 0, high = nSorted - 1, mid, compareValue;
-        //Stop if we don't have any elements
-//        if(high < 1)
-//            return -1;
-//        int mid, compareValue;
 
         while (low <= high && high < nSorted) {
             //Calculates the index number that is in the middle of the range.
@@ -158,8 +146,6 @@ public class OrderedArrayList<E>
         int mid = low + (high - low) / 2;
 
         int compareValue = this.ordening.compare(searchItem, get(mid));
-
-//        System.out.printf("L[%s] M[%s] H[%s]%n", low, mid, high);
 
         if (low <= high && high < nSorted) {
             if (compareValue == 0) {
