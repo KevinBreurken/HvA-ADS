@@ -92,7 +92,6 @@ public class PurchaseTracker {
      * @param filePath
      */
     private void mergePurchasesFromFileRecursively(String filePath) {
-
         File file = new File(filePath);
 
         if (file.isDirectory()) {
@@ -108,11 +107,10 @@ public class PurchaseTracker {
             // merge the content of this file into this.purchases
             this.mergePurchasesFromFile(file.getAbsolutePath());
         }
-
     }
 
     /**
-     * show the top n purchases according to the ranking criterium specified by ranker
+     *  the top n purchases according to the ranking criterium specified by ranker
      *
      * @param n        the number of top purchases to be shown
      * @param subTitle some title text that clarifies the list
@@ -154,10 +152,10 @@ public class PurchaseTracker {
         // create a temporary ordered list for the additional purchases, ordered by same comparator as the main list
         OrderedList<Purchase> newPurchases = new OrderedArrayList<>(this.purchases.getOrdening());
 
+        importItemsFromFile(newPurchases, filePath, s -> Purchase.fromLine(s,products));
+
         // re-sort the accumulated purchases for efficient searching
         this.purchases.sort();
-
-        importItemsFromFile(newPurchases, filePath, s -> Purchase.fromLine(s,products));
 
         // merge each new purchase into the purchases list.
         for (Purchase purchase : newPurchases)

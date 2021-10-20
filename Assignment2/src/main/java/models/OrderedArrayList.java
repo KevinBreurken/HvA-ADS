@@ -49,9 +49,9 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
     @Override
     public void add(int index, E element) {
         super.add(index, element);
-        // Change nSorted due to the added element changing what part is sorted of the list.
-        if (index <= this.nSorted)
-            this.nSorted = index;
+
+        //Sets nSorted if the elements gets places in the sorted section.
+        if (index <= this.nSorted) this.nSorted = index;
     }
 
     @Override
@@ -141,24 +141,25 @@ public class OrderedArrayList<E> extends ArrayList<E> implements OrderedList<E> 
      * The found item shall yield a 0 result from the this.ordening comparator, and that need not to be in agreement with the .equals test.
      * Here we follow the comparator for ordening items and for deciding on equality.
      *
+     * The helper method setBinarySearchVariablesToDefault() needs to be called beforehand.
+     *
      * @param searchItem the item to be searched on the basis of comparison by this.ordening
      * @return the position index of the found item in the arrayList, or -1 if no item matches the search item.
      */
     public int indexOfByRecursiveBinarySearch(E searchItem) {
-        // Search on the sorted section of the arrayList, 0 <= index < nSorted
-        // and find the position of an item that matches searchItem (this.ordening comparator yields a 0 result)
-
-        //Stop if we don't have any elements
         if (size() < 1) return -1;
 
+        //Calculates the index number that is in the middle of the range that needs to be checked.
         int mid = low + (high - low) / 2;
 
+        //Compares the given item to the item in the middle of the range (between low and high).
         int compareValue = this.ordening.compare(searchItem, get(mid));
 
         if (low <= high && high < nSorted) {
-            if (compareValue == 0) {
-                return mid;
-            } else if (compareValue > 0) {
+            //Returns if the item has been found.
+            if (compareValue == 0) return mid;
+            //Sets the lowest and highest values of the range to check next and calls itself.
+            else if (compareValue > 0) {
                 low = mid + 1;
                 return indexOfByRecursiveBinarySearch(searchItem);
             } else {

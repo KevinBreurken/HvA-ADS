@@ -24,9 +24,6 @@ public class Purchase {
      */
     public static Purchase fromLine(String textLine, List<Product> products) {
         String[] splittedLine = textLine.split(DELIMITER);
-        //Putting the data in variables for the sake of readability.
-        long barcode = Long.parseLong(splittedLine[0]);
-        int count = Integer.parseInt(splittedLine[1]);
 
         //Returns if the given String isn't valid.
         if (splittedLine.length != 2) {
@@ -35,12 +32,17 @@ public class Purchase {
             return null;
         }
 
+        //Putting the data in variables for the sake of readability.
+        long barcode = Long.parseLong(splittedLine[0]);
+        int count = Integer.parseInt(splittedLine[1]);
+
         int index = products.indexOf(new Product(barcode));
         if (index <= -1) {
             //Commented out error so the main log is the same as the assignment.
             //System.err.printf("barcode found in textLine of purchase [%s] is not found in the productList\n", textLine);
             return null;
         }
+
         return new Purchase(products.get(index), count);
     }
 
