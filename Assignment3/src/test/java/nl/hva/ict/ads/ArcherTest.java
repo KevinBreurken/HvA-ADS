@@ -118,6 +118,7 @@ public class ArcherTest {
             archer1.registerScoreForRound(round, scores1);
             archer2.registerScoreForRound(round, scores2);
         }
+
         assertTrue(scoringScheme.compare(archer1, archer2) < 0);
     }
 }

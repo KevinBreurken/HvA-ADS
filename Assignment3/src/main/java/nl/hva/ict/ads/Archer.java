@@ -41,12 +41,12 @@ public class Archer {
             return;
         }
 
-        if(round < 0 || round > MAX_ROUNDS){
+        if(round < 1 || round > MAX_ROUNDS){
             System.err.printf("Incorrect round given for registering scores. [%d]",round);
             return;
         }
 
-        scores[round] = points;
+        scores[round-1] = points.clone();
     }
 
 
@@ -78,17 +78,17 @@ public class Archer {
      */
     public int compareByHighestTotalScoreWithLeastMissesAndLowestId(Archer other) {
 
-        int compareValue = getTotalScore() - other.getTotalScore();
+        int compareValue = other.getTotalScore() - getTotalScore();
 
         if(compareValue != 0)
             return compareValue;
 
-        compareValue = other.getAmountOfTotalMisses() - getAmountOfTotalMisses();
+        compareValue = getAmountOfTotalMisses() - other.getAmountOfTotalMisses();
 
         if(compareValue != 0)
             return compareValue;
 
-        return other.getId() - getId();
+        return id - other.getId();
     }
 
     public int getAmountOfTotalMisses(){
