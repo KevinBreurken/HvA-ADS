@@ -117,8 +117,6 @@ public class Archer {
         return lastName;
     }
 
-    // TODO provide a toSting implementation to format archers nicely
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

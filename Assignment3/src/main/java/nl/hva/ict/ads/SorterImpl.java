@@ -14,9 +14,24 @@ public class SorterImpl<E> implements Sorter<E> {
      * @return  the items sorted in place
      */
     public List<E> selInsSort(List<E> items, Comparator<E> comparator) {
-        // TODO implement selection or insertion sort
+        int n = items.size();
+        for (int i = 1; i < n; i++) {
+            for (int j = i; j > 0 && less(comparator,items.get(j),items.get(j-1)); j--) {
+                exchange(items,j,j-1);
+            }
+        }
 
         return items;
+    }
+
+    private boolean less(Comparator<E> comparator,E itemA,E itemB){
+        return comparator.compare(itemA,itemB) < 0;
+    }
+
+    private void exchange(List<E> items, int i, int j){
+        E item = items.get(i);
+        items.set(i,items.get(j));
+        items.set(j,item);
     }
 
     /**
