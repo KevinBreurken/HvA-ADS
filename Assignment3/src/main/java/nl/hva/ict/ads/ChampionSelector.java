@@ -13,7 +13,6 @@ public class ChampionSelector {
         Names.reSeed(randomizer.nextLong());
     }
 
-
     /**
      * Enrolls all nrOfArchers into the champion selector of the competition
      * Every archer is registered by id, first name and last name.

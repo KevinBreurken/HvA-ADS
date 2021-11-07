@@ -93,7 +93,7 @@ class ArcherSorterTest {
     //Extra Tests
 
     /**
-     * Copy of topsHeapSortAndCollectionSortResultInSameOrder tests selection specifically.
+     * Copy of topsHeapSortAndCollectionSortResultInSameOrder that tests the selection sort specifically.
      */
     @Test
     void EXTRA_selectionSortAndCollectionSortResultInSameOrder() {
@@ -120,7 +120,7 @@ class ArcherSorterTest {
     }
 
     /**
-     * Copy of topsHeapSortAndCollectionSortResultInSameOrder tests insertion specifically.
+     * Copy of topsHeapSortAndCollectionSortResultInSameOrder that tests the insertion sort specifically.
      */
     @Test
     void EXTRA_insertionSortAndCollectionSortResultInSameOrder() {
