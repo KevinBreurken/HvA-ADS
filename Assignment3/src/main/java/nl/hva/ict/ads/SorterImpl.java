@@ -110,11 +110,9 @@ public class SorterImpl<E> implements Sorter<E> {
         int i = from, j = to + 1;
 
         while (true) {
-            // increases i by 1 while the item at the index is lower than the first item in the range.
             while (less(comparator, items.get(++i), items.get(from)))
                 if (i == to) break;
 
-            // opposite of previous statement.
             while (less(comparator, items.get(from), items.get(--j)))
                 if (j == from) break;
 

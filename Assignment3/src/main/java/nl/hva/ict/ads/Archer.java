@@ -117,13 +117,6 @@ public class Archer {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%s (%d) %s %s", getId(), getTotalScore(), getFirstName(), getLastName()));
-
-//        for (int i = 0; i < scores.length; i++) {
-//            sb.append(String.format("\t(%d) (%d) (%d)\n", scores[i][0],scores[i][1],scores[i][2]));
-//        }
-
-        return sb.toString();
+        return String.format("%s (%d) %s %s", getId(), getTotalScore(), getFirstName(), getLastName());
     }
 }
