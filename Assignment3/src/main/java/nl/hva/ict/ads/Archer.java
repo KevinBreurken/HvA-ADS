@@ -10,7 +10,6 @@ public class Archer {
     private final String firstName;
     private final String lastName;
 
-    // TODO add instance variable(s) to track the scores per round per arrow
     int[][] scores;
 
     /**
