@@ -3,6 +3,7 @@ package nl.hva.ict.ads;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 public class SorterImpl<E> implements Sorter<E> {
 
@@ -16,11 +17,34 @@ public class SorterImpl<E> implements Sorter<E> {
      * @return the items sorted in place
      */
     public List<E> selInsSort(List<E> items, Comparator<E> comparator) {
-        int n = items.size();
-        for (int i = 1; i < n; i++) {
+        //Randomise which sort we use
+        Random rd = new Random();
+        if (rd.nextBoolean())
+            return selectionSort(items, comparator);
+        else
+            return insertionSort(items,comparator);
+    }
+
+    public List<E> insertionSort(List<E> items, Comparator<E> comparator) {
+        for (int i = 1; i < items.size(); i++) {
             for (int j = i; j > 0 && less(comparator, items.get(j), items.get(j - 1)); j--) {
                 exchange(items, j, j - 1);
             }
+        }
+
+        return items;
+    }
+
+    public List<E> selectionSort(List<E> items, Comparator<E> comparator) {
+        int n = items.size();
+        for (int i = 0; i < n; i++) {
+            int min = i;
+            for (int j = i + 1; j < n; j++) {
+                if (less(comparator, items.get(j), items.get(min))) {
+                    min = j;
+                }
+            }
+            exchange(items, i, min);
         }
 
         return items;
@@ -128,13 +152,15 @@ public class SorterImpl<E> implements Sorter<E> {
         // that way the root of the heap will contain the worst item of the lead collection
         // which can be compared easily against other candidates from the remainder of the list
         Comparator<E> reverseComparator = comparator.reversed();
-
+        System.out.println("call-1");
+        System.out.println(items);
         // initialise the lead collection with the first numTops items in the list
         for (int heapSize = 2; heapSize <= numTops; heapSize++) {
             // repair the heap condition of items[0..heapSize-2] to include new item items[heapSize-1]
             heapSwim(items, heapSize, reverseComparator);
         }
-
+        System.out.println("call-2: After heapsSwim()");
+        System.out.println(items);
         // insert remaining items into the lead collection as appropriate
         for (int i = numTops; i < items.size(); i++) {
             // loop-invariant: items[0..numTops-1] represents the current lead collection in a heap data structure
@@ -188,7 +214,9 @@ public class SorterImpl<E> implements Sorter<E> {
     private void heapSwim(List<E> items, int heapSize, Comparator<E> comparator) {
         // TODO swim items[heapSize-1] up the heap until
         //      i==0 || items[(i-1]/2] <= items[i]
-
+        while (heapSize > 1 && less(comparator, items.get((heapSize) / 2), items.get(heapSize))) {
+            exchange(items, ((heapSize) / 2), heapSize);
+        }
     }
 
     /**
@@ -205,6 +233,12 @@ public class SorterImpl<E> implements Sorter<E> {
     private void heapSink(List<E> items, int heapSize, Comparator<E> comparator) {
         // TODO sink items[0] down the heap until
         //      2*i+1>=heapSize || (items[i] <= items[2*i+1] && items[i] <= items[2*i+2])
-
+        while (2 * heapSize <= items.size()) {
+            int j = 2 * heapSize;
+            if (j < items.size() && less(comparator, items.get(j), items.get(j + 1))) j++;
+            if (!less(comparator, items.get(heapSize), items.get(j))) break;
+            exchange(items, heapSize, j);
+            heapSize = j;
+        }
     }
 }

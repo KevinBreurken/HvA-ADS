@@ -90,4 +90,59 @@ class ArcherSorterTest {
         assertEquals(manyArchers.subList(0,25), manySortedArchers.subList(0,25));
     }
 
+    //Extra Tests
+
+    /**
+     * Copy of topsHeapSortAndCollectionSortResultInSameOrder tests selection specifically.
+     */
+    @Test
+    void EXTRA_selectionSortAndCollectionSortResultInSameOrder() {
+        List<Archer> fewSortedArchers = new ArrayList<>(fewArchers);
+        List<Archer> manySortedArchers = new ArrayList<>(manyArchers);
+
+        Collections.shuffle(fewSortedArchers);
+        sorter.selectionSort(fewSortedArchers, Comparator.comparing(Archer::getId));
+        fewArchers.sort(Comparator.comparing(Archer::getId));
+        assertEquals(fewArchers, fewSortedArchers);
+
+        sorter.selectionSort(manySortedArchers, Comparator.comparing(Archer::getLastName));
+        manyArchers.sort(Comparator.comparing(Archer::getLastName));
+        assertEquals(manyArchers.stream().map(Archer::getLastName).collect(Collectors.toList()),
+                manySortedArchers.stream().map(Archer::getLastName).collect(Collectors.toList()));
+
+        sorter.selectionSort(fewSortedArchers, scoringScheme);
+        fewArchers.sort(scoringScheme);
+        assertEquals(fewArchers, fewSortedArchers);
+
+        sorter.selectionSort(manySortedArchers, scoringScheme);
+        manyArchers.sort(scoringScheme);
+        assertEquals(manyArchers, manySortedArchers);
+    }
+
+    /**
+     * Copy of topsHeapSortAndCollectionSortResultInSameOrder tests insertion specifically.
+     */
+    @Test
+    void EXTRA_insertionSortAndCollectionSortResultInSameOrder() {
+        List<Archer> fewSortedArchers = new ArrayList<>(fewArchers);
+        List<Archer> manySortedArchers = new ArrayList<>(manyArchers);
+
+        Collections.shuffle(fewSortedArchers);
+        sorter.insertionSort(fewSortedArchers, Comparator.comparing(Archer::getId));
+        fewArchers.sort(Comparator.comparing(Archer::getId));
+        assertEquals(fewArchers, fewSortedArchers);
+
+        sorter.insertionSort(manySortedArchers, Comparator.comparing(Archer::getLastName));
+        manyArchers.sort(Comparator.comparing(Archer::getLastName));
+        assertEquals(manyArchers.stream().map(Archer::getLastName).collect(Collectors.toList()),
+                manySortedArchers.stream().map(Archer::getLastName).collect(Collectors.toList()));
+
+        sorter.insertionSort(fewSortedArchers, scoringScheme);
+        fewArchers.sort(scoringScheme);
+        assertEquals(fewArchers, fewSortedArchers);
+
+        sorter.insertionSort(manySortedArchers, scoringScheme);
+        manyArchers.sort(scoringScheme);
+        assertEquals(manyArchers, manySortedArchers);
+    }
 }
