@@ -52,19 +52,18 @@ public class Archer {
     /**
      * Calculates/retrieves the total score of all arrows across all rounds
      *
-     * @return
+     * @return the total score
      */
     public int getTotalScore() {
-        // TODO reduce cyclical complexity.
-        int val = 0;
+        int total = 0;
 
         for (int[] score : scores) {
             for (int i : score) {
-                val += i;
+                total += i;
             }
         }
 
-        return val;
+        return total;
     }
 
     /**

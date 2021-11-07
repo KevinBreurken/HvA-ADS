@@ -17,12 +17,11 @@ public class SorterImpl<E> implements Sorter<E> {
      * @return the items sorted in place
      */
     public List<E> selInsSort(List<E> items, Comparator<E> comparator) {
-        //Randomise which sort we use
+        //Randomise which sort we use.
+        //This is not the most efficient way, but we wanted to implement both sorts for learning purposes.
         Random rd = new Random();
-        if (rd.nextBoolean())
-            return selectionSort(items, comparator);
-        else
-            return insertionSort(items,comparator);
+        if (rd.nextBoolean()) return selectionSort(items, comparator);
+        else return insertionSort(items,comparator);
     }
 
     public List<E> insertionSort(List<E> items, Comparator<E> comparator) {
