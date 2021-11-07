@@ -74,8 +74,8 @@ public class SorterImpl<E> implements Sorter<E> {
 
     /**
      * Helper-function for the quick-sort.
-     * Returns a range of items where nothing to the left of the returned item is higher than it
-     * and nothing to the right is lower than the item.
+     * The index of an item where nothing to the left of it is higher
+     * and nothing to the right is lower.
      * This item is the pivot, as this item is in the right spot and other items still need to be rearranged.
      * @param items list of items
      * @param from first item in the list to check from
@@ -95,7 +95,7 @@ public class SorterImpl<E> implements Sorter<E> {
             while (less(comparator, items.get(from), items.get(--j)))
                 if (j == from) break;
 
-            if (i >= j) break; 
+            if (i >= j) break;
             exchange(items, i, j);
         }
 
