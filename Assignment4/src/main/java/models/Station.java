@@ -1,9 +1,7 @@
 package models;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.NavigableMap;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 public class Station {
@@ -14,8 +12,7 @@ public class Station {
     public Station(int id, String name) {
         this.stn = id;
         this.name = name;
-        // TODO initialize the measurements data structure with a suitable implementation class.
-
+        // TODO v initialize the measurements data structure with a suitable implementation class.
     }
 
     public Collection<Measurement> getMeasurements() {
@@ -140,5 +137,8 @@ public class Station {
     // TODO any other methods required to make it work
 
 
-
+    @Override
+    public String toString() {
+        return String.format("%d/%s",stn,name);
+    }
 }
