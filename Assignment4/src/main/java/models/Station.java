@@ -3,6 +3,7 @@ package models;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Station {
     private final int stn;
@@ -56,10 +57,19 @@ public class Station {
     public int addMeasurements(Collection<Measurement> newMeasurements) {
         int oldSize = this.getMeasurements().size();
 
-        // TODO add all newMeasurements to the station
-        //  ignore those who are not related to this station and entries with a duplicate date.
+        //TODO:  ignore those who are entries with a duplicate date.
+        
+        //Filters out the invalid or not relevant measurements
+        newMeasurements = newMeasurements.stream()
+                .filter(measurement -> measurement.getStation().getStn() == stn)
+                .collect(Collectors.toSet());
 
+        //Adds the measurements to the Map
+        for (Measurement measurement : newMeasurements) {
+            measurements.put(measurement.getDate(), measurement);
+        }
 
+        //Returns the amount of added Measurements
         return this.getMeasurements().size() - oldSize;
     }
 

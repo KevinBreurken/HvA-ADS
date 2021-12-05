@@ -1,6 +1,8 @@
 package models;
 
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 
 public class Measurement {
@@ -48,12 +50,26 @@ public class Measurement {
         String[] fields = textLine.split(",");
         if (fields.length < NUM_FIELDS) return null;
 
-        // TODO create a new Measurement instance
-        //  further parse and convert and store all relevant quantities
+        try {
+            //Gets the station out of the map and checks if valid
+            Station station = stations.get(Integer.parseInt(fields[0]));
+            if (station == null) return null;
 
+            //Creates a Measurement and sets the attributes
+            Measurement measurement = new Measurement(station, Integer.parseInt(fields[1].replaceAll("\\s", "")));
+            measurement.setAverageWindSpeed(Double.parseDouble(fields[4].replaceAll("\\s", ""))*0.1);
+            measurement.setMaxWindGust(Double.parseDouble(fields[9].replaceAll("\\s", ""))*0.1);
+            measurement.setAverageTemperature(Double.parseDouble(fields[11].replaceAll("\\s", ""))*0.1);
+            measurement.setMinTemperature(Double.parseDouble(fields[12].replaceAll("\\s", ""))*0.1);
+            measurement.setMaxTemperature(Double.parseDouble(fields[14].replaceAll("\\s", ""))*0.1);
+            measurement.setSolarHours(Double.parseDouble(fields[18].replaceAll("\\s", ""))*0.1);
+            measurement.setPrecipitation(Double.parseDouble(fields[22].replaceAll("\\s", ""))*0.1);
+            measurement.setMaxHourlyPrecipitation(Double.parseDouble(fields[23].replaceAll("\\s", ""))*0.1);
 
-
-        return null;
+            return measurement;
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 
     public Station getStation() {
@@ -126,5 +142,10 @@ public class Measurement {
 
     public void setMaxHourlyPrecipitation(Double maxHourlyPrecipitation) {
         this.maxHourlyPrecipitation = maxHourlyPrecipitation;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("");
     }
 }
