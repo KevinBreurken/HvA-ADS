@@ -13,14 +13,11 @@ public class Station {
     public Station(int id, String name) {
         this.stn = id;
         this.name = name;
-        // TODO v initialize the measurements data structure with a suitable implementation class.
+        measurements = new TreeMap<>();
     }
 
     public Collection<Measurement> getMeasurements() {
-        // TODO return the measurements of this station
-
-
-        return null;
+        return measurements.values();
     }
 
     public int getStn() {
@@ -58,7 +55,7 @@ public class Station {
         int oldSize = this.getMeasurements().size();
 
         //TODO:  ignore those who are entries with a duplicate date.
-        
+
         //Filters out the invalid or not relevant measurements
         newMeasurements = newMeasurements.stream()
                 .filter(measurement -> measurement.getStation().getStn() == stn)

@@ -1,8 +1,6 @@
 package models;
 
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Map;
 
 public class Measurement {
@@ -40,36 +38,41 @@ public class Measurement {
      * converts integer values to doubles as per unit of measure indicators
      * empty or corrupt values are replaced by Double.NaN
      * -1 values that indicate < 0.05 are replaced by 0.0
+     *
      * @param textLine
-     * @param stations  a map of Stations that can be accessed by station number STN
-     * @return          a new Measurement instance that records all data values of above quantities
-     *                  null if the station number cannot be resolved,
-     *                      or the record is incomplete or cannot be parsed
+     * @param stations a map of Stations that can be accessed by station number STN
+     * @return a new Measurement instance that records all data values of above quantities
+     * null if the station number cannot be resolved,
+     * or the record is incomplete or cannot be parsed
      */
-    public static Measurement fromLine(String textLine, Map<Integer,Station> stations) {
+    public static Measurement fromLine(String textLine, Map<Integer, Station> stations) {
         String[] fields = textLine.split(",");
         if (fields.length < NUM_FIELDS) return null;
 
         try {
             //Gets the station out of the map and checks if valid
-            Station station = stations.get(Integer.parseInt(fields[0]));
+            Station station = stations.get(Integer.parseInt(fields[0].trim()));
             if (station == null) return null;
 
             //Creates a Measurement and sets the attributes
-            Measurement measurement = new Measurement(station, Integer.parseInt(fields[1].replaceAll("\\s", "")));
-            measurement.setAverageWindSpeed(Double.parseDouble(fields[4].replaceAll("\\s", ""))*0.1);
-            measurement.setMaxWindGust(Double.parseDouble(fields[9].replaceAll("\\s", ""))*0.1);
-            measurement.setAverageTemperature(Double.parseDouble(fields[11].replaceAll("\\s", ""))*0.1);
-            measurement.setMinTemperature(Double.parseDouble(fields[12].replaceAll("\\s", ""))*0.1);
-            measurement.setMaxTemperature(Double.parseDouble(fields[14].replaceAll("\\s", ""))*0.1);
-            measurement.setSolarHours(Double.parseDouble(fields[18].replaceAll("\\s", ""))*0.1);
-            measurement.setPrecipitation(Double.parseDouble(fields[22].replaceAll("\\s", ""))*0.1);
-            measurement.setMaxHourlyPrecipitation(Double.parseDouble(fields[23].replaceAll("\\s", ""))*0.1);
+            Measurement measurement = new Measurement(station, Integer.parseInt(fields[1].trim()));
+            measurement.setAverageWindSpeed(measurement.castToDouble(fields[4]));
+            measurement.setMaxWindGust(measurement.castToDouble(fields[9]));
+            measurement.setAverageTemperature(measurement.castToDouble(fields[11]));
+            measurement.setMinTemperature(measurement.castToDouble(fields[12]));
+            measurement.setMaxTemperature(measurement.castToDouble(fields[14]));
+            measurement.setSolarHours(measurement.castToDouble(fields[18]));
+            measurement.setPrecipitation(measurement.castToDouble(fields[22]));
+            measurement.setMaxHourlyPrecipitation(measurement.castToDouble(fields[23]));
 
             return measurement;
         } catch (NumberFormatException ex) {
             return null;
         }
+    }
+
+    private Double castToDouble(String s) {
+        return s.isBlank() ? Double.NaN : Double.parseDouble(s.trim()) * 0.1;
     }
 
     public Station getStation() {

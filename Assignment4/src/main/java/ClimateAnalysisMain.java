@@ -9,17 +9,12 @@ public class ClimateAnalysisMain {
     public static void main(String[] args) {
         System.out.println("Welcome to the HvA Climate Analyser");
 
-        //eigen code
-        String test = " 1234 277   ";
-        System.out.println(test.trim());
-        System.out.println(test.replaceAll("\\s", ""));
+        ClimateTracker climateTracker = new ClimateTracker();
+        climateTracker.importClimateDataFromVault(ClimateAnalysisMain.class.getResource("/knmi").getPath());
+        System.out.println(climateTracker.getStations());
 
-//        ClimateTracker climateTracker = new ClimateTracker();
-//
-//        climateTracker.importClimateDataFromVault(ClimateAnalysisMain.class.getResource("/knmi").getPath());
-//
-//        System.out.println("\n1. Total Number of measurements by station:\n" +
-//                climateTracker.numberOfMeasurementsByStation());
+        System.out.println("\n1. Total Number of measurements by station:\n" +
+                climateTracker.numberOfMeasurementsByStation());
 //        System.out.println("\n2. First day of measurement by station:\n" +
 //                climateTracker.firstDayOfMeasurementByStation());
 //

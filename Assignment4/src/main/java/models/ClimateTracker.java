@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ClimateTracker {
     private final String MEASUREMENTS_FILE_PATTERN = ".*\\.txt";
@@ -13,17 +14,16 @@ public class ClimateTracker {
     private Map<Integer,Station> stations;        // all available weather stations organised by Station Number (STN)
 
     public Set<Station> getStations() {
-        // TODO return all stations in this tracker
-
-
-        return Set.of();
+        return new HashSet<>(stations.values());
     }
+
     public Station findStationById(int stn) {
         // TODO find the station with the given stn
 
 
         return null;
     }
+
     public ClimateTracker() {
         this.stations = new HashMap<>();
     }
@@ -34,9 +34,11 @@ public class ClimateTracker {
      */
     public Map<Station,Integer> numberOfMeasurementsByStation() {
         // TODO build a map resolving for each station its number of registered Measurement instances
+        Map<Station, Integer> map = new HashMap<>();
 
+        stations.forEach((k, v) -> map.put(v, v.getMeasurements().size()));
 
-        return null;
+        return map;
     }
 
     /**
@@ -227,10 +229,10 @@ public class ClimateTracker {
         // create a temporary map to import the measurements, organised by date
         Map<LocalDate, Measurement> newMeasurementsByDate = new HashMap<>();
 
+        System.out.println(filePath);
         // import all measurements from the specified file into the newMeasurementsByDate map
         importItemsFromFile(newMeasurementsByDate, filePath, "# STN",
                 s -> Measurement.fromLine(s, this.stations), Measurement::getDate);
-
         //  add the measurements to their station
         //  (all measurements from the same file should belong to the same station)
         if (newMeasurementsByDate.size() > 0) {
