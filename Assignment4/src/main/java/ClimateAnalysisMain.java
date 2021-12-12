@@ -12,7 +12,7 @@ public class ClimateAnalysisMain {
         ClimateTracker climateTracker = new ClimateTracker();
         climateTracker.importClimateDataFromVault(ClimateAnalysisMain.class.getResource("/knmi").getPath());
         System.out.println(climateTracker.getStations());
-
+//
 //        System.out.println("\n1. Total Number of measurements by station:\n" +
 //                climateTracker.numberOfMeasurementsByStation());
 //        System.out.println("\n2. First day of measurement by station:\n" +
@@ -26,8 +26,8 @@ public class ClimateAnalysisMain {
 //                climateTracker.findStationById(260).totalPrecipitationBetween(LocalDate.of(1963,1,1), LocalDate.of(1963,12,31)));
 
         //TODO
-//        System.out.printf("\n6. Annual trend of average temperatures (in degC):\n%s\n",
-//                climateTracker.annualAverageTemperatureTrend());
+        System.out.printf("\n6. Annual trend of average temperatures (in degC):\n%s\n",
+                climateTracker.annualAverageTemperatureTrend());
 //        System.out.printf("\n7. Annual trend of maximum hourly precipitation (in mm):\n%s\n",
 //                climateTracker.annualMaximumTrend(Measurement::getMaxHourlyPrecipitation));
 //        System.out.printf("\n8. Annual trend of maximum wind gust (in m/s):\n%s\n",
@@ -35,10 +35,11 @@ public class ClimateAnalysisMain {
 
 //        System.out.printf("\n9. All-time monthly profile of daily solar hours:\n%s\n",
 //                climateTracker.allTimeAverageDailySolarByMonth());
-//      //END OF TOD-o
+//      //**END OF TODO**
 
-        System.out.printf("\n10. Coldest year = %d\n", climateTracker.coldestYear());
+//        System.out.printf("\n10. Coldest year = %d\n", climateTracker.coldestYear());
 
+        //TODO
         //mapToCSV("Annual average temperature trend", climateTracker.annualAverageTemperatureTrend());
         //mapToCSV("Annual max hourly precipitation trend", climateTracker.annualMaximumTrend(Measurement::getMaxHourlyPrecipitation));
         //mapToCSV("Annual max wind gust trend", climateTracker.annualMaximumTrend(Measurement::getMaxWindGust));

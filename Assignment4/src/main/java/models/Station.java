@@ -102,11 +102,7 @@ public class Station {
      * @return the number of valid values found
      */
     public int numValidValues(Function<Measurement, Double> mapper) {
-        // TODO count the number of valid values that can be accessed in the measurements collection
-        //  by means of the mapper access function
-
-
-        return 0;
+        return (int) measurements.values().stream().filter(m -> !mapper.apply(m).isNaN()).count();
     }
 
     /**

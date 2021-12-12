@@ -131,10 +131,7 @@ public class ClimateTracker {
     public Map<Station, Integer> numberOfValidValuesByStation(Function<Measurement, Double> mapper) {
         Map<Station, Integer> map = new HashMap<>();
 
-        stations.values().forEach(station -> map.put(
-                station,
-                (int) station.getMeasurements().stream().filter(measurement -> !mapper.apply(measurement).isNaN()).count()
-        ));
+        stations.values().forEach(s -> map.put(s, s.numValidValues(mapper)));
 
         return map;
     }
@@ -147,9 +144,21 @@ public class ClimateTracker {
      * @return a map(Y,T) that provides for each year Y the average temperature T of that year
      */
     public Map<Integer, Double> annualAverageTemperatureTrend() {
-        // TODO build a map collecting for each year the average temperature in that year
+        Map<Integer, ArrayList<Double>> helperMap = new HashMap<>();
         Map<Integer, Double> map = new HashMap<>();
 
+        stations.values().forEach(s -> s.getMeasurements().forEach(m -> {
+            int key = m.getDate().getYear();
+
+            //Sets a new key and value pair
+            if (helperMap.get(key) == null)
+                helperMap.put(key, new ArrayList<>());
+
+            //Adds the value to the arrayList
+            helperMap.get(key).add(m.getAverageTemperature());
+        }));
+
+        helperMap.forEach((y, v) -> map.put(y, v.stream().mapToDouble(m -> m).average().getAsDouble()));
 
         return map;
     }
@@ -197,24 +206,17 @@ public class ClimateTracker {
      * return -1 if no valid minimum temperature measurements are available
      */
     public int coldestYear() {
-        // TODO determine the coldest year
-        //  hint: first build a helper map that accumulates the yearsums of negative minimum temperatures
-        //        then find the coldest year in that helper map
-
+        //Helper-map with a year as a key and a total sum of negative temperatures as the value.
         Map<Integer, Double> map = new HashMap<>();
 
-        stations.values().forEach(s -> {
+        //Loops trough all the stations and their measurements and stores the temperatures below 0 in a map.
+        getStations().forEach(s -> s.getMeasurements().forEach(m -> {
+            if (m.getMinTemperature() < 0)
+                map.merge(m.getDate().getYear(), m.getMinTemperature(), Double::sum);
+        }));
 
-        });
-
-        return 0;
-//        Map<Station, Long> map = new HashMap<>();
-//
-//        stations.values().forEach(s ->
-//                map.put(s, s.getMeasurements().stream().filter(m -> m.getMinTemperature() < 0).count())
-//        );
-//
-//        return map.values().stream().
+        //Finds the lowest value in the map and returns the key of that value.
+        return Collections.min(map.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 
     /**
