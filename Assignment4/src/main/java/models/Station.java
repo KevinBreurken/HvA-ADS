@@ -1,10 +1,9 @@
 package models;
 
+import com.sun.source.tree.Tree;
+
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.NavigableMap;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,17 +58,10 @@ public class Station {
     public int addMeasurements(Collection<Measurement> newMeasurements) {
         int oldSize = this.getMeasurements().size();
 
-        //TODO:  ignore those who are entries with a duplicate date.
-
-        //Filters out the invalid or not relevant measurements
-        newMeasurements = newMeasurements.stream()
-                .filter(measurement -> measurement.getStation().getStn() == stn)
-                .collect(Collectors.toSet());
-
-        //Adds the measurements to the Map
-        for (Measurement measurement : newMeasurements) {
-            measurements.put(measurement.getDate(), measurement);
-        }
+        //Filters out the invalid or not relevant measurements and adds them to the measurements map.
+        measurements = newMeasurements.stream()
+                .filter(m -> m.getStation().getStn() == stn && !this.measurements.containsKey(m.getDate()))
+                .collect(Collectors.toMap(Measurement::getDate, m -> m, (m1, m2) -> m1, TreeMap::new));
 
         //Returns the amount of added Measurements
         return this.getMeasurements().size() - oldSize;

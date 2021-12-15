@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ClimateTracker {
     private final String MEASUREMENTS_FILE_PATTERN = ".*\\.txt";
@@ -144,23 +146,18 @@ public class ClimateTracker {
      * @return a map(Y,T) that provides for each year Y the average temperature T of that year
      */
     public Map<Integer, Double> annualAverageTemperatureTrend() {
-        Map<Integer, ArrayList<Double>> helperMap = new HashMap<>();
-        Map<Integer, Double> map = new HashMap<>();
+        //functie voor de key       m.getDate().getYear()
+        //functie voor de value     m.get..()
+        //merge function:            Double::sum
 
-        stations.values().forEach(s -> s.getMeasurements().forEach(m -> {
-            int key = m.getDate().getYear();
+        //TODO calculate the average temp
 
-            //Sets a new key and value pair
-            if (helperMap.get(key) == null)
-                helperMap.put(key, new ArrayList<>());
-
-            //Adds the value to the arrayList
-            helperMap.get(key).add(m.getAverageTemperature());
-        }));
-
-        helperMap.forEach((y, v) -> map.put(y, v.stream().mapToDouble(m -> m).average().getAsDouble()));
-
-        return map;
+        return stations.values().stream()
+                .map(Station::getMeasurements)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toMap(
+                        m -> m.getDate().getYear(), Measurement::getAverageTemperature, Double::sum
+                ));
     }
 
     /**

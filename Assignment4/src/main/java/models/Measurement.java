@@ -49,7 +49,6 @@ public class Measurement {
         String[] fields = textLine.split(",");
         if (fields.length < NUM_FIELDS) return null;
 
-        try {
             //Gets the station out of the map and checks if valid
             Station station = stations.get(Integer.parseInt(fields[0].trim()));
             if (station == null) return null;
@@ -66,9 +65,6 @@ public class Measurement {
             measurement.setMaxHourlyPrecipitation(measurement.castToDouble(fields[23]));
 
             return measurement;
-        } catch (NumberFormatException ex) {
-            return null;
-        }
     }
 
     private Double castToDouble(String s) {
@@ -147,8 +143,8 @@ public class Measurement {
         this.maxHourlyPrecipitation = maxHourlyPrecipitation;
     }
 
-    @Override
-    public String toString() {
-        return String.format("");
-    }
+//    @Override
+//    public String toString() {
+//        return String.format("%f", getAverageTemperature());
+//    }
 }
