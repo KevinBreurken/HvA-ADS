@@ -147,8 +147,9 @@ public class ClimateTracker {
      */
     public Map<Integer, Double> annualAverageTemperatureTrend() {
         return stations.values().stream()
-                .flatMap(s -> s.getMeasurements().stream())
-                .filter(m -> !Double.isNaN(m.getAverageTemperature()))
+                .flatMap(s -> s.getMeasurements().stream())  //Creating a stream of all the measurements
+                .filter(m -> !Double.isNaN(m.getAverageTemperature())) //Filtering out invalid values
+                //Grouping together values by year and setting the combined value as the averages of all values of that year
                 .collect(Collectors.groupingBy(m -> m.getDate().getYear(), Collectors.averagingDouble(Measurement::getAverageTemperature)));
     }
 
