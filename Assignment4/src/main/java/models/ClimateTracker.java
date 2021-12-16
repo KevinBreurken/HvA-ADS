@@ -146,18 +146,10 @@ public class ClimateTracker {
      * @return a map(Y,T) that provides for each year Y the average temperature T of that year
      */
     public Map<Integer, Double> annualAverageTemperatureTrend() {
-        //functie voor de key       m.getDate().getYear()
-        //functie voor de value     m.get..()
-        //merge function:            Double::sum
-
-        //TODO calculate the average temp
-
         return stations.values().stream()
-                .map(Station::getMeasurements)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toMap(
-                        m -> m.getDate().getYear(), Measurement::getAverageTemperature, Double::sum
-                ));
+                .flatMap(s -> s.getMeasurements().stream())
+                .filter(m -> !Double.isNaN(m.getAverageTemperature()))
+                .collect(Collectors.groupingBy(m -> m.getDate().getYear(), Collectors.averagingDouble(Measurement::getAverageTemperature)));
     }
 
     /**
