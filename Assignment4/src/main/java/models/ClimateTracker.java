@@ -84,7 +84,7 @@ public class ClimateTracker {
     }
 
     public Set<Station> getStations() {
-        return new HashSet<>(stations.values());
+        return new LinkedHashSet<>(stations.values());
     }
 
     public Station findStationById(int stn) {
@@ -97,9 +97,11 @@ public class ClimateTracker {
      * @return
      */
     public Map<Station, Integer> numberOfMeasurementsByStation() {
-        Map<Station, Integer> map = new HashMap<>();
+        Map<Station, Integer> map = new LinkedHashMap<>();
 
-        stations.forEach((k, v) -> map.put(v, v.getMeasurements().size()));
+        stations.forEach((k, v) -> {
+            map.put(v, v.getMeasurements().size());
+        });
 
         return map;
     }
@@ -112,11 +114,12 @@ public class ClimateTracker {
      */
     public Map<Station, LocalDate> firstDayOfMeasurementByStation() {
         // TODO build a map resolving for each station the date of its first day of measurements
-        Map<Station, LocalDate> map = new HashMap<>();
+        Map<Station, LocalDate> map = new LinkedHashMap<>();
 
         getStations().forEach(station -> {
             Optional<LocalDate> firstDayOfMeasurements = station.firstDayOfMeasurement();
             firstDayOfMeasurements.ifPresent(localDate -> map.put(station, localDate));
+
         });
 
         return map;
@@ -131,7 +134,7 @@ public class ClimateTracker {
      * @return
      */
     public Map<Station, Integer> numberOfValidValuesByStation(Function<Measurement, Double> mapper) {
-        Map<Station, Integer> map = new HashMap<>();
+        Map<Station, Integer> map = new LinkedHashMap<>();
 
         stations.values().forEach(s -> map.put(s, s.numValidValues(mapper)));
 
@@ -180,9 +183,9 @@ public class ClimateTracker {
     public Map<Month, Double> allTimeAverageDailySolarByMonth() {
         return new TreeMap<>(
                 stations.values().stream().flatMap(s -> s.getMeasurements().stream()) //Creating a stream of all the measurements
-                .filter(m -> !Double.isNaN(m.getSolarHours())) //Filtering out invalid values
-                //Grouping together values by month and setting the average of all values of that month as the value
-                .collect(Collectors.groupingBy(m -> m.getDate().getMonth(), Collectors.averagingDouble(Measurement::getSolarHours)))
+                        .filter(m -> !Double.isNaN(m.getSolarHours())) //Filtering out invalid values
+                        //Grouping together values by month and setting the average of all values of that month as the value
+                        .collect(Collectors.groupingBy(m -> m.getDate().getMonth(), Collectors.averagingDouble(Measurement::getSolarHours)))
         );
     }
 
