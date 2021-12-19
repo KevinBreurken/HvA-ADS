@@ -108,8 +108,9 @@ public class Station {
      * 0.0 if no measurements have been made in this period.
      */
     public double totalPrecipitationBetween(LocalDate startDate, LocalDate endDate) {
-        return measurements.subMap(startDate, endDate.plusDays(1)).values()
-                .stream().mapToDouble(Measurement::getPrecipitation).sum();
+        return measurements.subMap(startDate, endDate.plusDays(1)).values().stream()
+                .filter(m -> !Double.isNaN(m.getPrecipitation()))
+                .mapToDouble(Measurement::getPrecipitation).sum();
     }
 
     /**
