@@ -99,8 +99,8 @@ public class ClimateTracker {
     public Map<Station, Integer> numberOfMeasurementsByStation() {
         Map<Station, Integer> map = new LinkedHashMap<>();
 
-        stations.forEach((k, v) -> {
-            map.put(v, v.getMeasurements().size());
+        stations.values().forEach(s -> {
+            map.put(s, s.getMeasurements().size());
         });
 
         return map;
@@ -113,14 +113,11 @@ public class ClimateTracker {
      * @return
      */
     public Map<Station, LocalDate> firstDayOfMeasurementByStation() {
-        // TODO build a map resolving for each station the date of its first day of measurements
         Map<Station, LocalDate> map = new LinkedHashMap<>();
 
-        getStations().forEach(station -> {
-            Optional<LocalDate> firstDayOfMeasurements = station.firstDayOfMeasurement();
-            firstDayOfMeasurements.ifPresent(localDate -> map.put(station, localDate));
-
-        });
+        getStations().forEach(s -> s.firstDayOfMeasurement().ifPresent(
+                localDate -> map.put(s, localDate))
+        );
 
         return map;
     }
