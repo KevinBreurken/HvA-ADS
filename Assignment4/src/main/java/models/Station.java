@@ -124,14 +124,10 @@ public class Station {
      * Double.NaN if no valid measurements are available from this period.
      */
     public double averageBetween(LocalDate startDate, LocalDate endDate, Function<Measurement, Double> mapper) {
-        // TODO calculate and return the average value of the quantity mapper across the given period
-        //  use the 'subMap' method to only process the measurements within the given period
-
-
-        return Double.NaN;
+        return measurements.subMap(startDate, endDate.plusDays(1)).values().stream()
+                .filter(m -> !Double.isNaN(mapper.apply(m)))
+                .mapToDouble(mapper::apply).average().orElse(Double.NaN);
     }
-
-    // TODO any other methods required to make it work
 
 
     @Override
