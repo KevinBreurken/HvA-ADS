@@ -146,10 +146,9 @@ public class ClimateTracker {
      * @return a map(Y,T) that provides for each year Y the average temperature T of that year
      */
     public Map<Integer, Double> annualAverageTemperatureTrend() {
-        return stations.values().stream()
-                .flatMap(s -> s.getMeasurements().stream())  //Creating a stream of all the measurements
+        return stations.values().stream().flatMap(s -> s.getMeasurements().stream())  //Creating a stream of all the measurements
                 .filter(m -> !Double.isNaN(m.getAverageTemperature())) //Filtering out invalid values
-                //Grouping together values by year and setting the combined value as the averages of all values of that year
+                //Grouping together values by year and setting the average of all values of that year as the value
                 .collect(Collectors.groupingBy(m -> m.getDate().getYear(), Collectors.averagingDouble(Measurement::getAverageTemperature)));
     }
 
@@ -164,10 +163,10 @@ public class ClimateTracker {
      * @return a map(Y,Q) that provides for each year Y the maximum value Q of the specified quantity
      */
     public Map<Integer, Double> annualMaximumTrend(Function<Measurement, Double> mapper) {
-        // TODO build a map collecting for each year the maximum value of the mapped quantity in that year
-
-
-        return null;
+        return stations.values().stream().flatMap(s -> s.getMeasurements().stream())  //Creating a stream of all the measurements
+                .filter(m -> !Double.isNaN(mapper.apply(m))) //Filtering out invalid values
+                //Reducing the map to one value per year, keeping the largest value of that year
+                .collect(Collectors.toMap(m -> m.getDate().getYear(), mapper, Double::max));
     }
 
     /**
@@ -179,10 +178,12 @@ public class ClimateTracker {
      * @return a map(M,SQ) that provides for each month M the average daily sunshine hours SQ across all times
      */
     public Map<Month, Double> allTimeAverageDailySolarByMonth() {
-        // TODO build a map collecting for each month the average value of daily sunshine hours
-
-
-        return null;
+        return new TreeMap<>(
+                stations.values().stream().flatMap(s -> s.getMeasurements().stream()) //Creating a stream of all the measurements
+                .filter(m -> !Double.isNaN(m.getSolarHours())) //Filtering out invalid values
+                //Grouping together values by month and setting the average of all values of that month as the value
+                .collect(Collectors.groupingBy(m -> m.getDate().getMonth(), Collectors.averagingDouble(Measurement::getSolarHours)))
+        );
     }
 
     /**
