@@ -146,10 +146,13 @@ public class ClimateTracker {
      * @return a map(Y,T) that provides for each year Y the average temperature T of that year
      */
     public Map<Integer, Double> annualAverageTemperatureTrend() {
-        return stations.values().stream().flatMap(s -> s.getMeasurements().stream())  //Creating a stream of all the measurements
+        return stations.values().stream()
+                .flatMap(s -> s.getMeasurements().stream())  //Creating a stream of all the measurements
                 .filter(m -> !Double.isNaN(m.getAverageTemperature())) //Filtering out invalid values
-                //Grouping together values by year and setting the average of all values of that year as the value
-                .collect(Collectors.groupingBy(m -> m.getDate().getYear(), Collectors.averagingDouble(Measurement::getAverageTemperature)));
+                .collect(Collectors.groupingBy(
+                        m -> m.getDate().getYear(), //Key-mapper
+                        Collectors.averagingDouble(Measurement::getAverageTemperature) //Average of all values with the same key
+                ));
     }
 
     /**
@@ -200,11 +203,11 @@ public class ClimateTracker {
         //Helper-map with a year as a key and a total sum of negative temperatures as the value.
         Map<Integer, Double> map = new HashMap<>();
 
-        //Loops trough all the stations and their measurements and stores the temperatures below 0 in a map.
-        getStations().forEach(s -> s.getMeasurements().forEach(m -> {
+        //Loops through all the stations and their measurements and stores the temperatures below 0 in a map.
+        getStations().stream().flatMap(s -> s.getMeasurements().stream()).forEach(m -> {
             if (m.getMinTemperature() < 0)
                 map.merge(m.getDate().getYear(), m.getMinTemperature(), Double::sum);
-        }));
+        });
 
         //Finds the lowest value in the map and returns the key of that value.
         return Collections.min(map.entrySet(), Map.Entry.comparingByValue()).getKey();

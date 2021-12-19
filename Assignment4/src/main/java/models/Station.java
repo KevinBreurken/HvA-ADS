@@ -1,7 +1,5 @@
 package models;
 
-import com.sun.source.tree.Tree;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -58,10 +56,12 @@ public class Station {
     public int addMeasurements(Collection<Measurement> newMeasurements) {
         int oldSize = this.getMeasurements().size();
 
-        //Filters out the invalid or not relevant measurements and adds them to the measurements map.
-        measurements = newMeasurements.stream()
+        TreeMap<LocalDate, Measurement> map = newMeasurements.stream()
                 .filter(m -> m.getStation().getStn() == stn && !this.measurements.containsKey(m.getDate()))
-                .collect(Collectors.toMap(Measurement::getDate, m -> m, (m1, m2) -> m1, TreeMap::new));
+                .collect(Collectors.toMap(Measurement::getDate, m -> m, //Sets the key and value
+                        (m1, m2) -> m1, TreeMap::new)); //Merge and supply function
+
+        measurements.putAll(map);
 
         //Returns the amount of added Measurements
         return this.getMeasurements().size() - oldSize;
@@ -74,7 +74,9 @@ public class Station {
      * returns Double.NaN when no valid measurements are available
      */
     public double allTimeMaxTemperature() {
-        return measurements.values().stream().mapToDouble(Measurement::getMaxTemperature).max().orElse(Double.NaN);
+        return measurements.values().stream()
+                .mapToDouble(Measurement::getMaxTemperature)
+                .max().orElse(Double.NaN);
     }
 
     /**
@@ -95,7 +97,9 @@ public class Station {
      * @return the number of valid values found
      */
     public int numValidValues(Function<Measurement, Double> mapper) {
-        return (int) measurements.values().stream().filter(m -> !mapper.apply(m).isNaN()).count();
+        return (int) measurements.values().stream()
+                .filter(m -> !mapper.apply(m).isNaN())
+                .count();
     }
 
     /**
@@ -110,7 +114,8 @@ public class Station {
     public double totalPrecipitationBetween(LocalDate startDate, LocalDate endDate) {
         return measurements.subMap(startDate, endDate.plusDays(1)).values().stream()
                 .filter(m -> !Double.isNaN(m.getPrecipitation()))
-                .mapToDouble(Measurement::getPrecipitation).sum();
+                .mapToDouble(Measurement::getPrecipitation)
+                .sum();
     }
 
     /**
