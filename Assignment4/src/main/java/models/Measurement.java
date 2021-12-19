@@ -49,26 +49,32 @@ public class Measurement {
         String[] fields = textLine.split(",");
         if (fields.length < NUM_FIELDS) return null;
 
-            //Gets the station out of the map and checks if valid
-            Station station = stations.get(Integer.parseInt(fields[0].trim()));
-            if (station == null) return null;
+        //Gets the station out of the map and checks if valid
+        Station station = stations.get(Integer.parseInt(fields[0].trim()));
+        if (station == null) return null;
 
-            //Creates a Measurement and sets the attributes
-            Measurement measurement = new Measurement(station, Integer.parseInt(fields[1].trim()));
-            measurement.setAverageWindSpeed(measurement.castToDouble(fields[4]));
-            measurement.setMaxWindGust(measurement.castToDouble(fields[9]));
-            measurement.setAverageTemperature(measurement.castToDouble(fields[11]));
-            measurement.setMinTemperature(measurement.castToDouble(fields[12]));
-            measurement.setMaxTemperature(measurement.castToDouble(fields[14]));
-            measurement.setSolarHours(measurement.castToDouble(fields[18]));
-            measurement.setPrecipitation(measurement.castToDouble(fields[22]));
-            measurement.setMaxHourlyPrecipitation(measurement.castToDouble(fields[23]));
+        //Creates a Measurement and sets the attributes
+        Measurement measurement = new Measurement(station, Integer.parseInt(fields[1].trim()));
+        measurement.setAverageWindSpeed(measurement.castToDouble(fields[4]));
+        measurement.setMaxWindGust(measurement.castToDouble(fields[9]));
+        measurement.setAverageTemperature(measurement.castToDouble(fields[11]));
+        measurement.setMinTemperature(measurement.castToDouble(fields[12]));
+        measurement.setMaxTemperature(measurement.castToDouble(fields[14]));
+        measurement.setSolarHours(measurement.castSolarHoursValueToDouble(fields[18]));
+        measurement.setPrecipitation(measurement.castToDouble(fields[22]));
+        measurement.setMaxHourlyPrecipitation(measurement.castToDouble(fields[23]));
 
-            return measurement;
+        return measurement;
     }
 
     private Double castToDouble(String s) {
         return s.isBlank() ? Double.NaN : Double.parseDouble(s.trim()) * 0.1;
+    }
+
+    private Double castSolarHoursValueToDouble(String s) {
+        if (s.isBlank()) return Double.NaN;
+        if (Double.parseDouble(s) == -1) return 0.0;
+        return Double.parseDouble(s.trim()) * 0.1;
     }
 
     public Station getStation() {
