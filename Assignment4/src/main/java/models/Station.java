@@ -82,6 +82,7 @@ public class Station {
      * returns Optional.empty() if no measurements are available
      */
     public Optional<LocalDate> firstDayOfMeasurement() {
+        if (measurements.isEmpty()) return Optional.empty();
         return Optional.of(measurements.firstEntry().getKey());
     }
 
