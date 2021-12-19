@@ -149,8 +149,4 @@ public class Measurement {
         this.maxHourlyPrecipitation = maxHourlyPrecipitation;
     }
 
-//    @Override
-//    public String toString() {
-//        return String.format("%f", getAverageTemperature());
-//    }
 }
