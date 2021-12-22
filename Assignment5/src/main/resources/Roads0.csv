@@ -1,0 +1,9 @@
+﻿name;speed limit;junctions;;
+S102;80;Diemen;Amsterdam;Amsterdam-N;;
+S108;50;Amsterdam-Z;Amsterdam;Oostzaan;;
+S112;50;Amsterdam;Badhoevedorp;;
+A1;100;Diemen;Weesp;Amersfoort;;
+A2;120;Amsterdam-Z;Ouder-Amstel;Utrecht;;
+A4;100;Badhoevedorp;Leiden;;
+A9;120;Diemen;Ouder-Amstel;Badhoevedorp;Velsen;;
+A10;100;Amsterdam-Z;Diemen;Amsterdam-N;Oostzaan;Badhoevedorp;Amsterdam-Z;;
