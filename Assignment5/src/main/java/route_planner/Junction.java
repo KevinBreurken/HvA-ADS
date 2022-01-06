@@ -1,11 +1,11 @@
 package route_planner;
 
+import graphs.Identifiable;
+
 import java.io.PrintStream;
 import java.util.Locale;
 
-public class Junction
-        // TODO extend superclass and/or implement interfaces
-
+public class Junction implements Identifiable
 {
     private String name;            // unique name of the junction
     private double locationX;       // RD x-coordinate in km
@@ -108,8 +108,25 @@ public class Junction
 
     }
 
+    @Override
+    public String getId() {
+        return name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Junction))
+            return false;
+
+        Junction junction = (Junction)obj;
+        return junction.getId().equals(this.getId());
+    }
+
     // TODO more implementations as required for use with DirectedGraph, HashSet and/or HashMap
-
-
 
 }
