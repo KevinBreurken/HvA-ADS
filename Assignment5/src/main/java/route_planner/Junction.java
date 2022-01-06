@@ -5,8 +5,7 @@ import graphs.Identifiable;
 import java.io.PrintStream;
 import java.util.Locale;
 
-public class Junction implements Identifiable
-{
+public class Junction implements Identifiable {
     private String name;            // unique name of the junction
     private double locationX;       // RD x-coordinate in km
     private double locationY;       // RD y-coordinate in km
