@@ -205,14 +205,8 @@ public class DirectedGraph<V extends Identifiable, E> {
      * @return the total number of edges in the graph
      */
     public int getNumEdges() {
-        int amount = 0;
-
-        //TODO improve code
-        for (Map<V,E> value : edges.values()) {
-            for (E road : value.values()) amount++;
-        }
-
-        return amount;
+        return edges.values().stream().flatMap(veMap -> veMap.values().stream())
+                .mapToInt(value -> 1).sum();
     }
 
     /**
