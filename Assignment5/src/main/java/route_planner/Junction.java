@@ -69,11 +69,6 @@ public class Junction implements Identifiable {
     }
 
     /**
-     * draws all road segments starting from the junction with their default colour
-     * @param svgWriter
-     */
-
-    /**
      * Draws the road segment onto a .svg image with the specified colour
      * If no colour is provided, a default will be calculated on the basis of the maxSpeed
      * @param svgWriter

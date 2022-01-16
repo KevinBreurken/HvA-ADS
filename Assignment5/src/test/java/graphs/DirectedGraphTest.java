@@ -36,6 +36,9 @@ class DirectedGraphTest {
         ro = this.europe.addOrGetVertex(new Country("RO"));
         hu = this.europe.addOrGetVertex(new Country("HU"));
         this.europe.addConnection("RO","HU", 250);
+
+        System.out.println(europe.getNumVertices());
+        System.out.println(europe.getNumEdges());
     }
 
     @AfterEach

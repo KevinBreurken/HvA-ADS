@@ -49,8 +49,6 @@ public class DirectedGraph<V extends Identifiable, E> {
      */
     public Collection<V> getNeighbours(V fromVertex) {
         if (fromVertex == null) return null;
-
-        // TODO retrieve the collection of neighbour vertices of fromVertex out of the edges data structure
         return edges.get(fromVertex).keySet();
     }
 
@@ -69,10 +67,7 @@ public class DirectedGraph<V extends Identifiable, E> {
      */
     public Collection<E> getEdges(V fromVertex) {
         if (fromVertex == null) return null;
-
-        // TODO retrieve the collection of out-going edges which connect fromVertex with a neighbour in the edges data structure
-
-        return null;
+        return edges.get(fromVertex).values();
     }
 
     public Collection<E> getEdges(String fromId) {
@@ -140,10 +135,18 @@ public class DirectedGraph<V extends Identifiable, E> {
      * @return whether the edge has been added successfully
      */
     public boolean addEdge(String fromId, String toId, E newEdge) {
-        // TODO add (directed) newEdge to the graph between fromId and toId
+        V fromVertex = vertices.get(fromId);
+        V toVertex = vertices.get(toId);
 
+        if (fromVertex == null || toVertex == null)
+            return false;
 
-        return false;
+        if (edges.get(fromVertex).get(toVertex) != null)
+            return false;
+
+        edges.get(fromVertex).put(toVertex, newEdge);
+
+        return true;
     }
 
     /**
@@ -182,9 +185,7 @@ public class DirectedGraph<V extends Identifiable, E> {
      */
     public E getEdge(V fromVertex, V toVertex) {
         if (fromVertex == null || toVertex == null) return null;
-        // TODO retrieve the directed edge between vertices fromVertex and toVertex from the graph
-
-        return null;
+        return edges.get(fromVertex).get(toVertex);
     }
 
     public E getEdge(String fromId, String toId) {
@@ -204,9 +205,14 @@ public class DirectedGraph<V extends Identifiable, E> {
      * @return the total number of edges in the graph
      */
     public int getNumEdges() {
-        // TODO calculate and return the total number of directed edges in the graph
-        return this.edges.values().stream().filter(veMap -> {return veMap.values().size() != 0;}).collect(Collectors.toMap(Map::values,Function.identity())).size();
+        int amount = 0;
 
+        //TODO improve code
+        for (Map<V,E> value : edges.values()) {
+            for (E road : value.values()) amount++;
+        }
+
+        return amount;
     }
 
     /**

@@ -8,7 +8,6 @@ public class RoutePlannerMain {
         // load the small map from csv files
         RoadMap.reSeedRandomizer(20211220L);
         RoadMap roadMap0 = new RoadMap("Junctions0.csv", "Roads0.csv");
-        System.out.println(roadMap0);
 
         // provide a map into the target classpath
         roadMap0.svgDrawMap("RoadmapAMS.svg", null);
