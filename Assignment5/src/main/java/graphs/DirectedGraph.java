@@ -228,15 +228,35 @@ public class DirectedGraph<V extends Identifiable, E> {
      * or no path can be found from start to target
      */
     public DGPath depthFirstSearch(String startId, String targetId) {
-
         V start = getVertexById(startId);
         V target = getVertexById(targetId);
         if (start == null || target == null) return null;
 
         DGPath path = new DGPath();
+        Deque<V> visitedPath = recursiveDFS(start, target, path.visited);
+        if (visitedPath != null) {
+            path.vertices = visitedPath;
+            return path;
+        }
+        return null;
+    }
 
-        // TODO calculate the path from start to target by recursive depth-first-search
+    private Deque<V> recursiveDFS(V current, V target, Set<V> visited) {
+        if (visited.contains(current)) return null;
+        visited.add(current);
 
+        if (current.equals(target)) {
+            Deque<V> path = new LinkedList<>();
+            path.addLast(current);
+            return path;
+        }
+        for (V neighbour : this.getNeighbours(current)) {
+            Deque<V> path = recursiveDFS(neighbour, target, visited);
+            if (path != null) {
+                path.addFirst(current);
+                return path;
+            }
+        }
         return null;
     }
 

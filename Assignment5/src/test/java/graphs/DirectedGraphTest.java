@@ -100,6 +100,8 @@ class DirectedGraphTest {
     @Test
     void checkDFSearch() {
         DirectedGraph<Country, Integer>.DGPath path = europe.depthFirstSearch("UK","LUX");
+        System.out.println(europe);
+        System.out.println(path);
         assertNotNull(path);
         assertSame(europe.getVertexById("UK"), path.getVertices().peek());
         assertTrue(path.getVertices().size() >= 3);
