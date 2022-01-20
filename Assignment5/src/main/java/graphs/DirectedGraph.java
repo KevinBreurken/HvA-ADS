@@ -290,14 +290,11 @@ public class DirectedGraph<V extends Identifiable, E> {
         Deque<V> fifiQueue = new LinkedList<>(); //Visited vertices whose children still need to be processed
         Map<V, V> visitedFrom = new HashMap<>(); //Tracks the predecessors of visited vertices.
 
-//        // TODO calculate the path from start to target by breadth-first-search
-
-//        fifiQueue.offer(start);
         visitedFrom.put(start, null);
         path.visited.add(start);
 
         V current = start;
-        while (current != null) { //queue = null, visited from: <a, null>
+        while (current != null) {
             for (V neighbour : this.getNeighbours(current)) {
                 if (!path.visited.contains(neighbour)) {
                     fifiQueue.offer(neighbour);
@@ -312,7 +309,7 @@ public class DirectedGraph<V extends Identifiable, E> {
                         return path;
                     }
                 }
-            } //queue = [b, c], visited from: <a, null>, <b, curr>, <c, curr>
+            }
             current = fifiQueue.pollFirst();
         }
 
