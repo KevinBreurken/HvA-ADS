@@ -230,6 +230,7 @@ public class DirectedGraph<V extends Identifiable, E> {
     public DGPath depthFirstSearch(String startId, String targetId) {
         V start = getVertexById(startId);
         V target = getVertexById(targetId);
+
         if (start == null || target == null) return null;
 
         DGPath path = new DGPath();
@@ -271,9 +272,9 @@ public class DirectedGraph<V extends Identifiable, E> {
      * or no path can be found from start to target
      */
     public DGPath breadthFirstSearch(String startId, String targetId) {
-
         V start = getVertexById(startId);
         V target = getVertexById(targetId);
+
         if (start == null || target == null) return null;
 
         // initialise the result path of the search
@@ -286,8 +287,34 @@ public class DirectedGraph<V extends Identifiable, E> {
             return path;
         }
 
-        // TODO calculate the path from start to target by breadth-first-search
+        Deque<V> fifiQueue = new LinkedList<>(); //Visited vertices whose children still need to be processed
+        Map<V, V> visitedFrom = new HashMap<>(); //Tracks the predecessors of visited vertices.
 
+//        // TODO calculate the path from start to target by breadth-first-search
+
+//        fifiQueue.offer(start);
+        visitedFrom.put(start, null);
+        path.visited.add(start);
+
+        V current = start;
+        while (current != null) { //queue = null, visited from: <a, null>
+            for (V neighbour : this.getNeighbours(current)) {
+                if (!path.visited.contains(neighbour)) {
+                    fifiQueue.offer(neighbour);
+                    visitedFrom.put(neighbour, current);
+                    path.visited.add(neighbour);
+                    if (neighbour.equals(target)) {
+                        path.vertices.offerFirst(neighbour);
+                        while (current != null) {
+                            path.vertices.offerFirst(current);
+                            current = visitedFrom.get(current);
+                        }
+                        return path;
+                    }
+                }
+            } //queue = [b, c], visited from: <a, null>, <b, curr>, <c, curr>
+            current = fifiQueue.pollFirst();
+        }
 
         return null;
     }
@@ -329,17 +356,17 @@ public class DirectedGraph<V extends Identifiable, E> {
         nextDspNode.weightSumTo = 0.0;
         progressData.put(start, nextDspNode);
 
-        while (nextDspNode != null) {
-
-            // TODO continue Dijkstra's algorithm to process nextDspNode
-            //  mark nodes as you complete their processing
-            //  register all visited vertices while going for statistical purposes
-            //  if you hit the target: complete the path and bail out !!!
-
-
-            // TODO find the next nearest node that is not marked yet
-
-        }
+//        while (nextDspNode != null) {
+//
+//            // TODO continue Dijkstra's algorithm to process nextDspNode
+//            //  mark nodes as you complete their processing
+//            //  register all visited vertices while going for statistical purposes
+//            //  if you hit the target: complete the path and bail out !!!
+//
+//
+//            // TODO find the next nearest node that is not marked yet
+//
+//        }
 
         // no path found, graph was not connected ???
         return null;
