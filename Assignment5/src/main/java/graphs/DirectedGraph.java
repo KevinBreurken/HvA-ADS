@@ -141,12 +141,7 @@ public class DirectedGraph<V extends Identifiable, E> {
         if (fromVertex == null || toVertex == null)
             return false;
 
-        if (edges.get(fromVertex).get(toVertex) != null)
-            return false;
-
-        edges.get(fromVertex).put(toVertex, newEdge);
-
-        return true;
+        return addEdge(fromVertex,toVertex,newEdge);
     }
 
     /**
