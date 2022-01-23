@@ -352,8 +352,6 @@ public class DirectedGraph<V extends Identifiable, E> {
         //PriorityQueue for keeping track of which node to check next
         PriorityQueue<DSPNode> priorityQueue = new PriorityQueue<>();
 
-        DSPNode matchedWithTargetNode = null;
-
         // initialise the progress of the start node
         DSPNode nextDspNode = new DSPNode(start);
         nextDspNode.weightSumTo = 0.0;
@@ -361,28 +359,27 @@ public class DirectedGraph<V extends Identifiable, E> {
 
         while (nextDspNode != null) {
             for (V neighbour : this.getNeighbours(nextDspNode.vertex)) {
-                DSPNode node = progressData.get(neighbour);
-                if (node != null) {
-                    if (node.marked) continue;
+                DSPNode neighbourNode = progressData.get(neighbour);
+                if (neighbourNode != null) {
+                    if (neighbourNode.marked) continue;
 
-                    E edge = getEdge(nextDspNode.vertex, node.vertex);
+                    E edge = getEdge(nextDspNode.vertex, neighbourNode.vertex);
                     double weightValue = nextDspNode.weightSumTo + weightMapper.apply(edge);
-
-                    if (node.weightSumTo > weightValue) {
-                        node.fromVertex = nextDspNode.vertex;
-                        node.weightSumTo = weightValue;
+                    //Compares the two edges
+                    if (neighbourNode.weightSumTo > weightValue) {
+                        neighbourNode.fromVertex = nextDspNode.vertex;
+                        neighbourNode.weightSumTo = weightValue;
                     }
                 } else {
-                    node = new DSPNode(neighbour);
-                    node.fromVertex = nextDspNode.vertex;
-                    node.weightSumTo = weightMapper.apply(getEdge(nextDspNode.vertex, node.vertex));
-                    priorityQueue.add(node);
-                    path.visited.add(node.vertex);
+                    neighbourNode = new DSPNode(neighbour);
+                    neighbourNode.fromVertex = nextDspNode.vertex;
+                    neighbourNode.weightSumTo = weightMapper.apply(getEdge(nextDspNode.vertex, neighbourNode.vertex));
+                    priorityQueue.add(neighbourNode);
+                    path.visited.add(neighbourNode.vertex);
                 }
-                progressData.put(node.vertex, node);
+                progressData.put(neighbourNode.vertex, neighbourNode);
             }
 
-            //put node progressData
             nextDspNode.marked = true;
             nextDspNode = priorityQueue.poll();
 
