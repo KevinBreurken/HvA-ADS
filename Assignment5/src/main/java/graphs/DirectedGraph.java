@@ -365,29 +365,33 @@ public class DirectedGraph<V extends Identifiable, E> {
 
             for (V neighbour : this.getNeighbours(checkingDSPNode.vertex)) {
                 DSPNode neighbourNode = progressData.get(neighbour);
-                if (neighbourNode != null) { //DSPNode already exists with a weight of previous scan.
+                if (neighbourNode != null) {
+                    //DSPNode already exists with a weight of previous scan.
                     // ignore the node if we already searched it.
                     if (neighbourNode.marked) continue;
 
                     E edge = getEdge(checkingDSPNode.vertex, neighbourNode.vertex);
                     double weightValue = checkingDSPNode.weightSumTo + weightMapper.apply(edge);
-                    // update the nodes connection if its faster than previous connection.
+                    // update the nodes connection if it's faster than previous connection.
                     if (neighbourNode.weightSumTo > weightValue) {
                         neighbourNode.fromVertex = checkingDSPNode.vertex;
                         neighbourNode.weightSumTo = weightValue;
                     }
-                } else { // Create a new DSPNode
+                } else {
+                    // Create a new DSPNode
                     neighbourNode = new DSPNode(neighbour);
                     neighbourNode.fromVertex = checkingDSPNode.vertex;
                     neighbourNode.weightSumTo = weightMapper.apply(getEdge(checkingDSPNode.vertex, neighbourNode.vertex));
+                    //Add the data to the containers
                     priorityQueue.add(neighbourNode);
                     path.visited.add(neighbourNode.vertex);
                     progressData.put(neighbourNode.vertex, neighbourNode);
                 }
-                //update the occurence in the progressData map.
+                //update the occurrence in the progressData map.
                 progressData.put(neighbourNode.vertex, neighbourNode);
             }
-            //finished checking each neightbour
+
+            //finished checking each neighbour
             checkingDSPNode.marked = true;
             //check if the found the end node
             if (checkingDSPNode.vertex == target) {
