@@ -395,7 +395,6 @@ public class DirectedGraph<V extends Identifiable, E> {
                     if (nextDspNode.fromVertex != null)
                         path.totalWeight += weightMapper.apply(getEdge(nextDspNode.fromVertex, nextDspNode.vertex));
                     path.vertices.offerFirst(nextDspNode.vertex);
-                    System.out.println(nextDspNode.vertex.toString());
                     nextDspNode = progressData.get(nextDspNode.fromVertex);
                 }
                 return path;
