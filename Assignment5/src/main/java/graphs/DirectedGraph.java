@@ -141,7 +141,7 @@ public class DirectedGraph<V extends Identifiable, E> {
         if (fromVertex == null || toVertex == null)
             return false;
 
-        return addEdge(fromVertex,toVertex,newEdge);
+        return addEdge(fromVertex, toVertex, newEdge);
     }
 
     /**
@@ -353,42 +353,50 @@ public class DirectedGraph<V extends Identifiable, E> {
         PriorityQueue<DSPNode> priorityQueue = new PriorityQueue<>();
 
         // initialise the progress of the start node
-        DSPNode nextDspNode = new DSPNode(start);
-        nextDspNode.weightSumTo = 0.0;
-        progressData.put(nextDspNode.vertex, nextDspNode);
+        DSPNode startDSPNode = new DSPNode(start);
+        startDSPNode.weightSumTo = 0.0;
+        progressData.put(startDSPNode.vertex, startDSPNode);
+        priorityQueue.add(startDSPNode);
 
-        while (nextDspNode != null) {
-            for (V neighbour : this.getNeighbours(nextDspNode.vertex)) {
+        // keep searching until we searched every available node.
+        while (priorityQueue.size() != 0) {
+            // pull a new node from the priority queue.
+            DSPNode checkingDSPNode = priorityQueue.poll();
+
+            for (V neighbour : this.getNeighbours(checkingDSPNode.vertex)) {
                 DSPNode neighbourNode = progressData.get(neighbour);
-                if (neighbourNode != null) {
+                if (neighbourNode != null) { //DSPNode already exists with a weight of previous scan.
+                    // ignore the node if we already searched it.
                     if (neighbourNode.marked) continue;
 
-                    E edge = getEdge(nextDspNode.vertex, neighbourNode.vertex);
-                    double weightValue = nextDspNode.weightSumTo + weightMapper.apply(edge);
-                    //Compares the two edges
+                    E edge = getEdge(checkingDSPNode.vertex, neighbourNode.vertex);
+                    double weightValue = checkingDSPNode.weightSumTo + weightMapper.apply(edge);
+                    // update the nodes connection if its faster than previous connection.
                     if (neighbourNode.weightSumTo > weightValue) {
-                        neighbourNode.fromVertex = nextDspNode.vertex;
+                        neighbourNode.fromVertex = checkingDSPNode.vertex;
                         neighbourNode.weightSumTo = weightValue;
                     }
-                } else {
+                } else { // Create a new DSPNode
                     neighbourNode = new DSPNode(neighbour);
-                    neighbourNode.fromVertex = nextDspNode.vertex;
-                    neighbourNode.weightSumTo = weightMapper.apply(getEdge(nextDspNode.vertex, neighbourNode.vertex));
+                    neighbourNode.fromVertex = checkingDSPNode.vertex;
+                    neighbourNode.weightSumTo = weightMapper.apply(getEdge(checkingDSPNode.vertex, neighbourNode.vertex));
                     priorityQueue.add(neighbourNode);
                     path.visited.add(neighbourNode.vertex);
+                    progressData.put(neighbourNode.vertex, neighbourNode);
                 }
+                //update the occurence in the progressData map.
                 progressData.put(neighbourNode.vertex, neighbourNode);
             }
-
-            nextDspNode.marked = true;
-            nextDspNode = priorityQueue.poll();
-
-            if (nextDspNode != null && nextDspNode.vertex == target) {
-                while (nextDspNode != null) {
-                    if (nextDspNode.fromVertex != null)
-                        path.totalWeight += weightMapper.apply(getEdge(nextDspNode.fromVertex, nextDspNode.vertex));
-                    path.vertices.offerFirst(nextDspNode.vertex);
-                    nextDspNode = progressData.get(nextDspNode.fromVertex);
+            //finished checking each neightbour
+            checkingDSPNode.marked = true;
+            //check if the found the end node
+            if (checkingDSPNode.vertex == target) {
+                //reverse back through the linked list for the full directional path.
+                while (checkingDSPNode != null) {
+                    if (checkingDSPNode.fromVertex != null)
+                        path.totalWeight += weightMapper.apply(getEdge(checkingDSPNode.fromVertex, checkingDSPNode.vertex));
+                    path.vertices.offerFirst(checkingDSPNode.vertex);
+                    checkingDSPNode = progressData.get(checkingDSPNode.fromVertex);
                 }
                 return path;
             }
@@ -464,6 +472,12 @@ public class DirectedGraph<V extends Identifiable, E> {
 
         private DSPNode(V vertex) {
             this.vertex = vertex;
+        }
+
+        private DSPNode(V vertex, V fromVertex, double weightSumTo) {
+            this.vertex = vertex;
+            this.fromVertex = fromVertex;
+            this.weightSumTo = weightSumTo;
         }
 
         // comparable interface helps to find a node with the shortest current path, sofar
