@@ -33,20 +33,20 @@ public class RoutePlannerMain {
 
         // Run various types of searches
         final String FROM_ID = "Amsterdam";
-        //final String TO_ID = "Staphorst";
+//        final String TO_ID = "Staphorst";
         final String TO_ID = "Meppel";
         doPathSearches(roadMap, FROM_ID, TO_ID);
 
-        // now we have an accident between Diemen and Weesp...
-//        // TODO change the roadMap such that max average speed from Diemen to Weesp is only 5 km/h
+//        // now we have an accident between Diemen and Weesp...
+////        // TODO change the roadMap such that max average speed from Diemen to Weesp is only 5 km/h
 //        roadMap.getEdge("Diemen","Weesp").setMaxSpeed(5); //TODO toegevoegd door kevin. nog niet kunnen testen.
-//
-//        // find the fastest route avoiding the accident
+////
+////        // find the fastest route avoiding the accident
 //        RoadMap.DGPath path =
 //                roadMap.dijkstraShortestPath(FROM_ID, TO_ID,
 //                        // TODO provide an edgeWeightCalculator that yields the expected travel time for the road
 //
-//                        null
+//                        (road -> {return road.getLength()/road.getMaxSpeed();})
 //                );
 //        System.out.println("Dijkstra-accident-Weesp: " + path);
 //        roadMap.svgDrawMap(String.format("DSPACC-%s-%s.svg", FROM_ID, TO_ID), path);

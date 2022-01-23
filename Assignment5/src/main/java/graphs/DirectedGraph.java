@@ -351,6 +351,7 @@ public class DirectedGraph<V extends Identifiable, E> {
         //PriorityQueue for keeping track of which node to check next
         PriorityQueue<DSPNode> priorityQueue = new PriorityQueue<>();
 
+        DSPNode matchedWithTargetNode = null;
 
         // initialise the progress of the start node
         DSPNode nextDspNode = new DSPNode(start);
@@ -362,12 +363,10 @@ public class DirectedGraph<V extends Identifiable, E> {
             for (V neighbour : this.getNeighbours(nextDspNode.vertex)) {
                 DSPNode node = progressData.get(neighbour);
                 if (node != null) {
+
                     if(node.marked)
                         continue;
                     //A already existing DSPNode is found
-                    System.out.println("IF");
-                    System.out.println(node);
-                    //compare values
                     E edge = getEdge(nextDspNode.vertex, node.vertex);
                     double weightValue = nextDspNode.weightSumTo + weightMapper.apply(edge);
                     if (node.weightSumTo > weightValue) {
@@ -377,7 +376,6 @@ public class DirectedGraph<V extends Identifiable, E> {
                     progressData.put(node.vertex, node);
                 } else {
                     //A new DSPNode is added
-                    System.out.println("ELSE");
                     node = new DSPNode(neighbour);
                     node.fromVertex = nextDspNode.vertex;
                     node.weightSumTo = weightMapper.apply(getEdge(nextDspNode.vertex, node.vertex));
