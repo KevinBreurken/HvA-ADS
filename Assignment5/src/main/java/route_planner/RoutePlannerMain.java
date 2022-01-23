@@ -14,19 +14,12 @@ public class RoutePlannerMain {
         // provide a map into the target classpath
         roadMap0.svgDrawMap("RoadmapAMS.svg", null);
 
-//        System.out.println("map has been drawn");
-
         // Run various types of searches
         doPathSearches(roadMap0, "Oostzaan", "Ouder-Amstel");
-
-//        System.out.println("pathsearch complete");
 
         // load the complete map from csv files
         RoadMap.reSeedRandomizer(20211220L);
         RoadMap roadMap = new RoadMap("Junctions.csv", "Roads.csv");
-
-//        System.out.println("roadmap exists");
-//        System.out.println(roadMap);
 
         // provide a map into the target classpath
         roadMap.svgDrawMap("RoadmapNL.svg", null);
