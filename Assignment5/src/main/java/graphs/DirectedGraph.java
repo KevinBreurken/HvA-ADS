@@ -329,9 +329,9 @@ public class DirectedGraph<V extends Identifiable, E> {
      */
     public DGPath dijkstraShortestPath(String startId, String targetId,
                                        Function<E, Double> weightMapper) {
-
         V start = getVertexById(startId);
         V target = getVertexById(targetId);
+
         if (start == null || target == null) return null;
 
         // initialise the result path of the search
@@ -348,22 +348,65 @@ public class DirectedGraph<V extends Identifiable, E> {
         // you may choose a different approach of tracking progress of the algorithm, if you wish
         Map<V, DSPNode> progressData = new HashMap<>();
 
+        //PriorityQueue for keeping track of which node to check next
+        PriorityQueue<DSPNode> priorityQueue = new PriorityQueue<>();
+
+
         // initialise the progress of the start node
         DSPNode nextDspNode = new DSPNode(start);
         nextDspNode.weightSumTo = 0.0;
-        progressData.put(start, nextDspNode);
+        progressData.put(nextDspNode.vertex, nextDspNode);
 
-//        while (nextDspNode != null) {
-//
-//            // TODO continue Dijkstra's algorithm to process nextDspNode
-//            //  mark nodes as you complete their processing
-//            //  register all visited vertices while going for statistical purposes
-//            //  if you hit the target: complete the path and bail out !!!
-//
-//
-//            // TODO find the next nearest node that is not marked yet
-//
-//        }
+        while (nextDspNode != null) {
+
+            for (V neighbour : this.getNeighbours(nextDspNode.vertex)) {
+                DSPNode node = progressData.get(neighbour);
+                if (node != null && !node.marked) {
+                    System.out.println("IF #1");
+                    //compare values
+                    E edge = getEdge(nextDspNode.vertex, node.vertex);
+                    double weightValue = nextDspNode.weightSumTo + weightMapper.apply(edge);
+                    if (node.weightSumTo > weightValue) {
+                        node.fromVertex = nextDspNode.vertex;
+                        node.weightSumTo = weightValue;
+                    }
+                    progressData.put(node.vertex, node);
+                } else {
+                    System.out.println("ELSE");
+                    node = new DSPNode(neighbour);
+                    node.fromVertex = nextDspNode.vertex;
+                    node.weightSumTo = weightMapper.apply(getEdge(nextDspNode.vertex, node.vertex));
+                    priorityQueue.add(node);
+                    path.visited.add(node.vertex);
+                    progressData.put(node.vertex, node);
+                }
+                System.out.println(node.fromVertex + ":" + node.vertex + " : " + weightMapper.apply(getEdge(nextDspNode.vertex, node.vertex)));
+            }
+
+            //put node progressData
+            nextDspNode.marked = true;
+            nextDspNode = priorityQueue.poll();
+
+            if (nextDspNode != null && nextDspNode.vertex == target) {
+                while (nextDspNode != null) {
+                    if (nextDspNode.fromVertex != null)
+                        path.totalWeight += weightMapper.apply(getEdge(nextDspNode.fromVertex, nextDspNode.vertex));
+                    path.vertices.offerFirst(nextDspNode.vertex);
+                    System.out.println(nextDspNode.vertex.toString());
+                    nextDspNode = progressData.get(nextDspNode.fromVertex);
+                }
+                return path;
+            }
+
+            // TODO continue Dijkstra's algorithm to process nextDspNode
+            //  mark nodes as you complete their processing
+            //  register all visited vertices while going for statistical purposes
+            //  if you hit the target: complete the path and bail out !!!
+
+
+            // TODO find the next nearest node that is not marked yet
+
+        }
 
         // no path found, graph was not connected ???
         return null;
@@ -441,6 +484,15 @@ public class DirectedGraph<V extends Identifiable, E> {
         @Override
         public int compareTo(DSPNode dspv) {
             return Double.compare(weightSumTo, dspv.weightSumTo);
+        }
+
+        @Override
+        public String toString() {
+            return "DSPNode{" +
+                    "vertex=" + vertex +
+                    ", fromVertex=" + fromVertex +
+                    ", weightSumTo=" + weightSumTo +
+                    '}';
         }
     }
 }

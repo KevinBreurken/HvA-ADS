@@ -72,23 +72,25 @@ public class RoutePlannerMain {
 
         // find the routes by dijkstra-Shortest-Path with minimum total length
         path = roadMap.dijkstraShortestPath(fromId, toId, Road::getLength);
+
         System.out.println("Dijkstra-Shortest-Path: " + path);
         roadMap.svgDrawMap(String.format("DSP-%s-%s.svg", fromId, toId), path);
 //        path = roadMap.dijkstraShortestPath(toId, fromId,
 //                // TODO provide the same edgeWeightCalculator as above
-//
-//                null
+//                Road::getLength
 //        );
 //        System.out.println("Dijkstra-Shortest-Path return: " + path);
-//
-//        // find the routes by dijkstra-Shortest-Path with minimum total travel time
+
+        // find the routes by dijkstra-Shortest-Path with minimum total travel time
 //        path = roadMap.dijkstraShortestPath(fromId, toId,
 //                // TODO provide an edgeWeightCalculator that yields the expected travel time for the road
 //
-//                null
+//                (road) -> {
+//                    return road.getLength()/road.getMaxSpeed();
+//                }
 //        );
 //        System.out.println("Dijkstra-Fastest-Route: " + path);
-        roadMap.svgDrawMap(String.format("DFR-%s-%s.svg", fromId, toId), path);
+//        roadMap.svgDrawMap(String.format("DFR-%s-%s.svg", fromId, toId), path);
 
         System.out.println();
     }
