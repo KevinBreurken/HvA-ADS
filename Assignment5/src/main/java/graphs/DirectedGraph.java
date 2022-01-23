@@ -91,7 +91,7 @@ public class DirectedGraph<V extends Identifiable, E> {
 
         //Adds the vertex to the map containing all vertices
         vertices.put(newVertex.getId(), newVertex);
-        //Also adds the vertex to the edges map to sustain the representation invariant (part 4)
+        //Also adds the vertex to the edges map to sustain the representation invariant
         edges.put(newVertex, new HashMap<V, E>());
         return newVertex;
     }
@@ -108,13 +108,13 @@ public class DirectedGraph<V extends Identifiable, E> {
      * @return whether the edge has been added successfully
      */
     public boolean addEdge(V fromVertex, V toVertex, E newEdge) {
-        //Will not add the road if a road between the vertices already exists, as only one may
         if (vertices.get(fromVertex.getId()) == null)
             addOrGetVertex(fromVertex);
 
         if (vertices.get(toVertex.getId()) == null)
             addOrGetVertex(toVertex);
 
+        //Will not add the road if a road between the vertices already exists, as only one may in the same direction
         if (edges.get(fromVertex).get(toVertex) != null)
             return false;
 
@@ -205,7 +205,7 @@ public class DirectedGraph<V extends Identifiable, E> {
      * @return the total number of edges in the graph
      */
     public int getNumEdges() {
-        return edges.values().stream().flatMap(veMap -> veMap.values().stream())
+        return edges.values().stream().flatMap(map -> map.values().stream())
                 .mapToInt(value -> 1).sum();
     }
 
@@ -296,21 +296,26 @@ public class DirectedGraph<V extends Identifiable, E> {
 
         V current = start;
         while (current != null) {
+            //Checking the siblings of the current node
             for (V neighbour : this.getNeighbours(current)) {
-                if (!path.visited.contains(neighbour)) {
-                    fifiQueue.offer(neighbour);
-                    visitedFrom.put(neighbour, current);
-                    path.visited.add(neighbour);
-                    if (neighbour.equals(target)) {
-                        path.vertices.offerFirst(neighbour);
-                        while (current != null) {
-                            path.vertices.offerFirst(current);
-                            current = visitedFrom.get(current);
-                        }
-                        return path;
+                if (path.visited.contains(neighbour)) continue;
+
+                fifiQueue.offer(neighbour);
+                visitedFrom.put(neighbour, current);
+                path.visited.add(neighbour);
+
+                //Builds the path if the target node has been found
+                if (neighbour.equals(target)) {
+                    path.vertices.offerFirst(neighbour);
+                    while (current != null) {
+                        path.vertices.offerFirst(current);
+                        current = visitedFrom.get(current);
                     }
+                    return path;
                 }
+
             }
+            //Gets the next node
             current = fifiQueue.pollFirst();
         }
 
@@ -360,31 +365,26 @@ public class DirectedGraph<V extends Identifiable, E> {
         progressData.put(nextDspNode.vertex, nextDspNode);
 
         while (nextDspNode != null) {
-
             for (V neighbour : this.getNeighbours(nextDspNode.vertex)) {
                 DSPNode node = progressData.get(neighbour);
                 if (node != null) {
+                    if (node.marked) continue;
 
-                    if(node.marked)
-                        continue;
-                    //A already existing DSPNode is found
                     E edge = getEdge(nextDspNode.vertex, node.vertex);
                     double weightValue = nextDspNode.weightSumTo + weightMapper.apply(edge);
+
                     if (node.weightSumTo > weightValue) {
                         node.fromVertex = nextDspNode.vertex;
                         node.weightSumTo = weightValue;
                     }
-                    progressData.put(node.vertex, node);
                 } else {
-                    //A new DSPNode is added
                     node = new DSPNode(neighbour);
                     node.fromVertex = nextDspNode.vertex;
                     node.weightSumTo = weightMapper.apply(getEdge(nextDspNode.vertex, node.vertex));
                     priorityQueue.add(node);
                     path.visited.add(node.vertex);
-                    progressData.put(node.vertex, node);
                 }
-//                System.out.println(node.fromVertex + ":" + node.vertex + " : " + weightMapper.apply(getEdge(nextDspNode.vertex, node.vertex)));
+                progressData.put(node.vertex, node);
             }
 
             //put node progressData
@@ -400,15 +400,6 @@ public class DirectedGraph<V extends Identifiable, E> {
                 }
                 return path;
             }
-
-            // TODO continue Dijkstra's algorithm to process nextDspNode
-            //  mark nodes as you complete their processing
-            //  register all visited vertices while going for statistical purposes
-            //  if you hit the target: complete the path and bail out !!!
-
-
-            // TODO find the next nearest node that is not marked yet
-
         }
 
         // no path found, graph was not connected ???

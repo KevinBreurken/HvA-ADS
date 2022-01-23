@@ -36,9 +36,6 @@ class DirectedGraphTest {
         ro = this.europe.addOrGetVertex(new Country("RO"));
         hu = this.europe.addOrGetVertex(new Country("HU"));
         this.europe.addConnection("RO","HU", 250);
-
-        System.out.println(europe.getNumVertices());
-        System.out.println(europe.getNumEdges());
     }
 
     @AfterEach
@@ -100,8 +97,6 @@ class DirectedGraphTest {
     @Test
     void checkDFSearch() {
         DirectedGraph<Country, Integer>.DGPath path = europe.depthFirstSearch("UK","LUX");
-        System.out.println(europe);
-        System.out.println(path);
         assertNotNull(path);
         assertSame(europe.getVertexById("UK"), path.getVertices().peek());
         assertTrue(path.getVertices().size() >= 3);
