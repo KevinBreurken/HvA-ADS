@@ -361,8 +361,12 @@ public class DirectedGraph<V extends Identifiable, E> {
 
             for (V neighbour : this.getNeighbours(nextDspNode.vertex)) {
                 DSPNode node = progressData.get(neighbour);
-                if (node != null && !node.marked) {
-                    System.out.println("IF #1");
+                if (node != null) {
+                    if(node.marked)
+                        continue;
+                    //A already existing DSPNode is found
+                    System.out.println("IF");
+                    System.out.println(node);
                     //compare values
                     E edge = getEdge(nextDspNode.vertex, node.vertex);
                     double weightValue = nextDspNode.weightSumTo + weightMapper.apply(edge);
@@ -372,6 +376,7 @@ public class DirectedGraph<V extends Identifiable, E> {
                     }
                     progressData.put(node.vertex, node);
                 } else {
+                    //A new DSPNode is added
                     System.out.println("ELSE");
                     node = new DSPNode(neighbour);
                     node.fromVertex = nextDspNode.vertex;
@@ -380,7 +385,7 @@ public class DirectedGraph<V extends Identifiable, E> {
                     path.visited.add(node.vertex);
                     progressData.put(node.vertex, node);
                 }
-                System.out.println(node.fromVertex + ":" + node.vertex + " : " + weightMapper.apply(getEdge(nextDspNode.vertex, node.vertex)));
+//                System.out.println(node.fromVertex + ":" + node.vertex + " : " + weightMapper.apply(getEdge(nextDspNode.vertex, node.vertex)));
             }
 
             //put node progressData
