@@ -9,7 +9,7 @@ public class RoutePlannerMain {
         RoadMap.reSeedRandomizer(20211220L);
         RoadMap roadMap0 = new RoadMap("Junctions0.csv", "Roads0.csv");
 
-//        System.out.println(roadMap0);
+        System.out.println(roadMap0);
 
         // provide a map into the target classpath
         roadMap0.svgDrawMap("RoadmapAMS.svg", null);
@@ -33,16 +33,15 @@ public class RoutePlannerMain {
 
         // Run various types of searches
         final String FROM_ID = "Amsterdam";
-//        final String TO_ID = "Staphorst";
         final String TO_ID = "Meppel";
         doPathSearches(roadMap, FROM_ID, TO_ID);
 
         // now we have an accident between Diemen and Weesp...
-        roadMap.getEdge("Diemen","Weesp").setMaxSpeed(5);
+        roadMap.getEdge("Diemen", "Weesp").setMaxSpeed(5);
 
         // find the fastest route avoiding the accident
         RoadMap.DGPath path =
-                roadMap.dijkstraShortestPath(FROM_ID, TO_ID, (road -> road.getLength()/road.getMaxSpeed()));
+                roadMap.dijkstraShortestPath(FROM_ID, TO_ID, (road -> road.getLength() / road.getMaxSpeed()));
         System.out.println("Dijkstra-accident-Weesp: " + path);
         roadMap.svgDrawMap(String.format("DSPACC-%s-%s.svg", FROM_ID, TO_ID), path);
     }
@@ -66,14 +65,14 @@ public class RoutePlannerMain {
         System.out.println("Breadth-first-search return: " + path);
 
         // find the routes by dijkstra-Shortest-Path with minimum total length
-        path = roadMap.dijkstraShortestPath(fromId, toId, Road::getLength);
-
+        path = roadMap.dijkstraShortestPath(fromId, toId,Road::getLength);
         System.out.println("Dijkstra-Shortest-Path: " + path);
         roadMap.svgDrawMap(String.format("DSP-%s-%s.svg", fromId, toId), path);
-        path = roadMap.dijkstraShortestPath(toId, fromId, Road::getLength);
+        path = roadMap.dijkstraShortestPath(toId, fromId,Road::getLength);
         System.out.println("Dijkstra-Shortest-Path return: " + path);
 
-        path = roadMap.dijkstraShortestPath(fromId, toId,(road) -> road.getLength()/road.getMaxSpeed());
+        // find the routes by dijkstra-Shortest-Path with minimum total travel time
+        path = roadMap.dijkstraShortestPath(fromId, toId, (road -> road.getLength() / road.getMaxSpeed()));
         System.out.println("Dijkstra-Fastest-Route: " + path);
         roadMap.svgDrawMap(String.format("DFR-%s-%s.svg", fromId, toId), path);
 

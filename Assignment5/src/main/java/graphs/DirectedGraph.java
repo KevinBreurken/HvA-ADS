@@ -252,6 +252,7 @@ public class DirectedGraph<V extends Identifiable, E> {
             return path;
         }
         for (V neighbour : this.getNeighbours(current)) {
+
             Deque<V> path = recursiveDFS(neighbour, target, visited);
             if (path != null) {
                 path.addFirst(current);
